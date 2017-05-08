@@ -16,7 +16,7 @@ module.exports = (app)=>{
   app.post('/posts',(req,res)=>{
     console.log(req.body);
     let data = new Tips(req.body);
-    data.save()
-    res.status(201);
-  });
+    data.save();
+    res.status(201).end();
+  })
 };

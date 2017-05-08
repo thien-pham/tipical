@@ -17,7 +17,7 @@ describe('\trun page\n', function() {
     });
 });
 describe("Do post stuff.",()=>{
-    it("Post endpoint", (done) => {
+    it("Post endpoint", () => {
         const post = {
             username: faker.internet.userName(),
             body: faker.lorem.paragraph()
@@ -26,11 +26,11 @@ describe("Do post stuff.",()=>{
         .post("/posts")
         .send(post)
         .then((result)=>{
-            console.log(result);
-            result.should.have.status(201);
-            done();
-        }).catch((err)=>{
-            console.err(err);
+            console.log("value of result:");
+            console.log(result.body);
+            result.body.should.be.a('Object');
+        }).catch(function (err) {
+          throw err;
         });
     });
 });
