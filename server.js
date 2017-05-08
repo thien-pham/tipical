@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv');
 const app = express();
 
 
@@ -9,6 +10,6 @@ app.get('/',(req,res)=>{
 });
 
 
-app.listen(8080, () => console.log('app is listening'));
+app.listen(process.env.PORT, () => console.log('app is listening'));
 
 module.exports = app;
