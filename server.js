@@ -1,15 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const {DATABASE, PORT} = require('./config');
-
+const bodyParser = require('body-parser');
+mongoose.Promise = global.Promise;
 const app = express();
 
-app.use(express.static('public'));
+require("./router")(app);
+app.set("view engine", "ejs");
 
-app.get('/',(req,res)=>{
-    return res.body;
-});
-
+app.use(bodyParser);
+app.use(express.static('views'));
 
 app.listen(PORT || 8080, () => {
     console.log('app is listening');
