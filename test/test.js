@@ -10,8 +10,8 @@ describe('\trun page\n', function() {
         return chai.request(app)
             .get('/')
             .then(function(res) {
-                res.should.have.status(200);     
-                res.text.should.be.string;
+                res.should.have.status(200);   
+                res.should.be.html;  
             });
     }); 
 });
