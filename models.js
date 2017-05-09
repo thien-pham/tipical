@@ -1,5 +1,6 @@
 let mongoose = require('mongoose');
-let bcrypt = require('becryptjs');
+let bcrypt = require('bcryptjs');
+let moment = require('moment');
 let Schema = mongoose.Schema;
 
 let TipsSchema = Schema({
@@ -9,10 +10,10 @@ let TipsSchema = Schema({
   tags: Array,
   points: {type: Number, default: 0}
 });
-//TODO: Add in Moment and a virtual to replace ugly JS dates with awesome formatted dates
-TipsSchema.virtual('date').get(function() {
-  this.date = moment().format('MMMM Do YYYY, h:mm a');
-  return this.date;
+
+TipsSchema.virtual('postDate').get(function() {
+  let date = moment(this.date).format('MMMM Do YYYY, h:mm a');
+  return date;
 });
 
 let UserSchema = Schema({
@@ -23,18 +24,18 @@ let UserSchema = Schema({
   },
   password: {
     type: String,
-    required: true 
+    required: true
   }
 });
 
 UserSchema.methods.validatePassword = function(password) {
-  return bcrypt 
+  return bcrypt
     .compare(password, this.password)
     .then(isValid => isValid);
 };
 
 UserSchema.statics.hashPassword = function(password) {
-  return bcrypt 
+  return bcrypt
     .hash(password, 10)
     .then(hash => hash);
 };

@@ -16,9 +16,9 @@ module.exports = (app)=>{
   app.post('/posts', (req, res)=>{
     console.log(req.body);
     let data = new Tips(req.body);
-    data.save().then(() => 
+    data.save().then(() =>
       res.status(201).end())
-      .catch(err => { 
+      .catch(err => {
         res.status(400).end();
         console.error(err);
       });
@@ -27,15 +27,14 @@ module.exports = (app)=>{
   app.put('/posts/:id', (req, res) => {
     Tips
       .findByIdAndUpdate(req.params.id, {$set: req.body})
-      .then((result) => res.status(204).end())
-      .catch(err => res.status(500).json({message: 'Internal server error on put'}));
+      .then(() => res.status(204).end())
+      .catch(() => res.status(500).json({message: 'Internal server error on put'}));
   });
 
   app.delete('/posts/:id', (req, res) => {
-    Tips 
+    Tips
       .findByIdAndRemove(req.params.id)
-      .then((result) => res.status(204).end())
-      .catch(err => res.status(500).json({message: 'Internal server error on delete'}));
+      .then(() => res.status(204).end())
+      .catch(() => res.status(500).json({message: 'Internal server error on delete'}));
   });
 };
-
