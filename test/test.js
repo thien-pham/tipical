@@ -13,7 +13,7 @@ describe('\trun page\n', function() {
             .then(function(res) {
                 res.should.have.status(200);
                 res.should.be.html;
-            });
+            }).catch(function(err){throw err;});
     });
 });
 describe("Do post stuff.",()=>{

@@ -18,5 +18,5 @@ module.exports = (app)=>{
     let data = new Tips(req.body);
     data.save();
     res.status(201).end();
-  })
+  });
 };
