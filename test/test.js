@@ -1,24 +1,30 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
+const mongoose = require('mongoose');
 const {Tips, User} = require('../models');
 const {app,startServer,stopServer} = require('../server.js');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-let testUser = {} 
+let testUser = ()=>{return User.hashPassword('123').then((hashed)=>{
+    console.log('hashed is ' + hashed);
     return {
     username: 'Joe',
-    password: '$2a$10$i8D0JeiwLwl1QXqN7DSkyujGw4u9l65X8xA9TmY26TJCoeJ3QqEZK'
-};
+    password: hashed,
+    unhashedPW: '123'
+};});};
 
-// function makeFakeUser(){
-//     return User.create(user);
-// }
+// let testUser = {
+//     username: 'JOE',
+//     password: User.hashPassword('123')
+// };
+    
 
-function makeFakeData(number){
+function makeFakeData(){
   let data = [];
+  let number = 5;
   for(let i =0;i<=number;i++){
     console.log('running!  Iteration ' + i);
     data.push({
@@ -27,12 +33,25 @@ function makeFakeData(number){
     });
     //console.dir(data);
   }
-  return data;
+  return Tips.insertMany(data);
 }
 
-function tearDownDb(){
-    Tips.remove({}, () => console.log('It works!'))
-        .then(() => User.remove({}, () => console.log('It works, the sequel!')));
+function makeFakeUser(){
+    return User.create(testUser);
+}
+
+// function tearDownDb(){
+//     Tips.remove({}, () => console.log('It works!'))
+//         .then(() => User.remove({}, () => console.log('It works, the sequel!')));
+// }
+
+function tearDownDb() {
+  return new Promise((resolve, reject) => {
+    console.warn('Deleting database');
+    mongoose.connection.dropDatabase()
+      .then(result => resolve(result))
+      .catch(err => reject(err))
+  });
 }
 
 describe('Run the tests!\n',function(){
@@ -42,13 +61,12 @@ describe('Run the tests!\n',function(){
   });
 
   beforeEach(function(){
-    let data = makeFakeData(5);
-    return User.create(testUser), Tips.insertMany(data);
+    return Promise.all([makeFakeUser(), makeFakeData()]);
   });
   
-  afterEach(function(){
-      tearDownDb();
-  });
+//   afterEach(function(){
+//       tearDownDb();
+//   });
 
   after(()=>stopServer());
 
