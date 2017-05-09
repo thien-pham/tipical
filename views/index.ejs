@@ -1,1 +1,6 @@
-<p>Posts</p>
+<p>Tips</p>
+<% for(let i=0; i<val.length; i++) {%>
+    <h2><%= val[i].username %></h2>
+    <p><%= val[i].body %></p>
+
+<%}%>
