@@ -28,7 +28,9 @@
     "mocha": "^3.3.0",
     "moment": "^2.18.1",
     "mongo": "^0.1.0",
-    "mongoose": "^4.9.8"
+    "mongoose": "^4.9.8",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

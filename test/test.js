@@ -1,16 +1,26 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
-const {Tips} = require('../models');
+const {Tips, User} = require('../models');
 const {app,startServer,stopServer} = require('../server.js');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
+let testUser = {} 
+    return {
+    username: 'Joe',
+    password: '$2a$10$i8D0JeiwLwl1QXqN7DSkyujGw4u9l65X8xA9TmY26TJCoeJ3QqEZK'
+};
+
+// function makeFakeUser(){
+//     return User.create(user);
+// }
+
 function makeFakeData(number){
   let data = [];
   for(let i =0;i<=number;i++){
-    console.log("running!  Iteration " + i);
+    console.log('running!  Iteration ' + i);
     data.push({
       username: faker.internet.userName(),
       body: faker.lorem.paragraph()
@@ -18,6 +28,11 @@ function makeFakeData(number){
     //console.dir(data);
   }
   return data;
+}
+
+function tearDownDb(){
+    Tips.remove({}, () => console.log('It works!'))
+        .then(() => User.remove({}, () => console.log('It works, the sequel!')));
 }
 
 describe('Run the tests!\n',function(){
@@ -28,8 +43,11 @@ describe('Run the tests!\n',function(){
 
   beforeEach(function(){
     let data = makeFakeData(5);
-    return Tips.insertMany(data);
-
+    return User.create(testUser), Tips.insertMany(data);
+  });
+  
+  afterEach(function(){
+      tearDownDb();
   });
 
   after(()=>stopServer());
@@ -53,6 +71,7 @@ describe('Run the tests!\n',function(){
           };
           return chai.request(app)
               .post('/posts')
+              .auth(testUser.username, testUser.password)
               .send(post)
               .then((result)=>{
                   console.log('value of result:');
