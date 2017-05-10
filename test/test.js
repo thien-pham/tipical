@@ -13,11 +13,10 @@ let testUser = {
     password: '$2a$10$i8D0JeiwLwl1QXqN7DSkyujGw4u9l65X8xA9TmY26TJCoeJ3QqEZK',
     unhashedPassword: '123'
 };
-    
+
 function makeFakeData(){
   let data = [];
   for(let i=0; i<=5; i++){
-    console.log('running!  Iteration ' + i);
     data.push({
       body: faker.lorem.paragraph()
     });
@@ -34,7 +33,7 @@ function tearDownDb() {
     console.warn('Deleting database');
     mongoose.connection.dropDatabase()
       .then(result => resolve(result))
-      .catch(err => reject(err))
+      .catch(err => reject(err));
   });
 }
 
@@ -47,7 +46,7 @@ describe('Run the tests!\n',function(){
   beforeEach(function(){
     return Promise.all([makeFakeUser(), makeFakeData()]);
   });
-  
+
   afterEach(function(){
     return tearDownDb();
   });
@@ -62,25 +61,24 @@ describe('Run the tests!\n',function(){
               .get('/')
               .then(function(res) {
                   res.should.have.status(200);
-                  res.should.be.html;
+                  res.body.should.be.a('array');
               }).catch(function(err){throw err;});
       });
   });
 
   describe('\tDo post stuff.',() => {
       it('Post endpoint', () => {
-          const post = {
-              body: faker.lorem.paragraph()
+          const newPost = {
+              body: faker.lorem.paragraph(),
+              location: [faker.address.latitude(),faker.address.longitude()]
           };
-          console.log(testUser);
           return chai.request(app)
               .post('/posts')
               .auth(testUser.username, testUser.unhashedPassword)
-              .send(post)
+              .send(newPost)
               .then((result)=>{
-                  console.log('value of result:');
-                  console.log(result.body);
-                  result.body.should.be.a('Object');
+                  result.should.have.status(201);
+                  result.should.be.a('object');
               }).catch(function (err) {
               throw err;
           });

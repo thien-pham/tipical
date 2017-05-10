@@ -28,32 +28,59 @@ const strategy = new BasicStrategy(function(username, password, callback) {
 });
 
 passport.use(strategy);
+
+//the closure for the module exporting
 module.exports = (app)=>{
   const bodyParser = require('body-parser');
   app.use(bodyParser.json());
 
+  //get all tips
   app.get('/', (req,res) => {
+      if(req.query.lat !== undefined && req.query.lon !== undefined){
+        const lat = parseFloat(req.query.lat);
+        const lon = parseFloat(req.query.lon);
+        Tips.find({
+          location: {
+            $near: {
+              $geometry: {
+                type: 'point',
+                coordinates: [lat,lon]
+              },
+              $maxDistance:1000000
+            }
+          }
+        }).then((data) => {
+          res.status(200).send(data);
+        }).catch(err => console.error(err));
+        return res.body;
+      }
       Tips.find().then((data) => {
-        res.render('index', {val: data});
+        res.status(200).send(data);
       }).catch(err => console.error(err));
       return res.body;
   });
 
-  app.post('/posts', 
+  //create post endpoint
+  app.post('/posts',
     passport.authenticate('basic', {session:false}), (req, res)=>{
     console.log(req.body);
     let data = new Tips(req.body);
     data.save().then(() =>
-      res.status(201).end())
+      res.status(201).location('/me').send())
       .catch(err => {
         res.status(400).end();
         console.error(err);
       });
   });
-  
-  app.post('/users', (req, res) => {
-    // let {username, password} = req.body;
 
+  //For client-side logging in info.  Ping it and if valid, returns true
+  app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
+    console.log("Hey there!");
+    res.send(true);
+  });
+
+  //Create user endpoint
+  app.post('/users', (req, res) => {
     return User
       .find({username: req.body.username})
       .count()
@@ -73,25 +100,26 @@ module.exports = (app)=>{
       .then(user => {
         return res.status(201).json(user);
       })
-      .catch(err => {
+      .catch(() => {
         res.status(500).json({message: 'something went terribly awry'});
       });
-  });
+    });
   });
 
-  app.put('/posts/:id', 
+  //update user endpoint
+  app.put('/posts/:id',
     passport.authenticate('basic', {session:false}), (req, res) => {
     Tips
       .findByIdAndUpdate(req.params.id, {$set: req.body})
-      .then(() => res.status(204).end())
+      .then(() => res.location('/me').status(204).end())
       .catch(() => res.status(500).json({message: 'Internal server error on put'}));
   });
 
-  app.delete('/posts/:id', 
+  app.delete('/posts/:id',
     passport.authenticate('basic', {session:false}), (req, res) => {
     Tips
       .findByIdAndRemove(req.params.id)
       .then(() => res.status(204).end())
       .catch(() => res.status(500).json({message: 'Internal server error on delete'}));
   });
-  };
+};
