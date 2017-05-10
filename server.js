@@ -8,6 +8,11 @@ const app = express();
 require('./router')(app);
 app.set('view engine', 'ejs');
 
+app.use((req,res,next)=>{
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.use(bodyParser);
 app.use(express.static('views'));
 
