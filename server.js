@@ -12,6 +12,7 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser);
 app.use(cors());
+app.options('*', cors());
 app.use(express.static('views'));
 
 let server;
