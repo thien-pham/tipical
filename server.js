@@ -2,10 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const {DATABASE, PORT} = require('./config');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 mongoose.Promise = global.Promise;
 const app = express();
+let {Tips, User} = require('./models');
 
-require('./router')(app);
+// require('./router')(app);
+ 
 
 // app.use((req, res, next)=> {
 //     res.header('Access-Control-Allow-Origin', '*');
@@ -16,14 +19,19 @@ require('./router')(app);
 //     next();
 // });
 
+app.use(cors());
+app.use(bodyParser());
+app.use(express.static('views'));
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-app.use(bodyParser);
-app.use(express.static('views'));
+
+require('./router')(app);
+
 
 let server;
 
