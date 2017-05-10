@@ -9,7 +9,7 @@ let TipsSchema = Schema({
   date: {type: Date, default: Date.now()},
   location:{ type: [Number], index: '2dsphere'},
   tags: Array,
-  points: {type: Number, default: 0}
+  points: {type: Array, default: []}
 });
 
 TipsSchema.virtual('postDate').get(function() {

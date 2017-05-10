@@ -34,6 +34,7 @@ module.exports = (app)=>{
   const bodyParser = require('body-parser');
   app.use(bodyParser.json());
 
+  //GET ENDPOINTS-------------------------------------------------------
   //get all tips
   app.get('/', (req,res) => {
       if(req.query.lat !== undefined && req.query.lon !== undefined){
@@ -46,7 +47,8 @@ module.exports = (app)=>{
                 type: 'point',
                 coordinates: [lat,lon]
               },
-              $maxDistance:1000000
+              //in meters
+              $maxDistance:50000000
             }
           }
         }).then((data) => {
@@ -60,6 +62,13 @@ module.exports = (app)=>{
       return res.body;
   });
 
+  //For client-side logging in info.  Ping it and if valid, returns true
+  app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
+    console.log("Hey there!");
+    res.send(true);
+  });
+
+  //POST ENDPOINTS-------------------------------------------------------
   //create post endpoint
   app.post('/posts',
     passport.authenticate('basic', {session:false}), (req, res)=>{
@@ -71,12 +80,6 @@ module.exports = (app)=>{
         res.status(400).end();
         console.error(err);
       });
-  });
-
-  //For client-side logging in info.  Ping it and if valid, returns true
-  app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
-    console.log("Hey there!");
-    res.send(true);
   });
 
   //Create user endpoint
@@ -106,6 +109,21 @@ module.exports = (app)=>{
     });
   });
 
+  //voting endpoint
+  app.post('/posts/vote/:id', passport.authenticate('basic', {session:false}), (req,res)=>{
+    Tips.findById(req.params.id).then((tip)=>{
+      if(tip && !(tip.points.includes(req.user.username))){
+        tip.points.push(req.user.username);
+        Tips.findByIdAndUpdate(req.params.id,{$set: tip})
+        .then(()=>res.status(204).end())
+        .catch(()=>res.status(500).json({message: 'there was a problem with the server on vote.'}));
+      }else{
+        res.status(403).json({message: "You already voted, cheater!"});
+      }
+    });
+  });
+
+  //UPDATE ENDPOINTS-------------------------------------------------------
   //update user endpoint
   app.put('/posts/:id',
     passport.authenticate('basic', {session:false}), (req, res) => {
@@ -114,7 +132,7 @@ module.exports = (app)=>{
       .then(() => res.location('/me').status(204).end())
       .catch(() => res.status(500).json({message: 'Internal server error on put'}));
   });
-
+  //DELETE ENDPOINTS-------------------------------------------------------
   app.delete('/posts/:id',
     passport.authenticate('basic', {session:false}), (req, res) => {
     Tips
