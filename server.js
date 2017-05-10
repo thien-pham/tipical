@@ -2,17 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const {DATABASE, PORT} = require('./config');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 mongoose.Promise = global.Promise;
 const app = express();
 
 require('./router')(app);
-app.set('view engine', 'ejs');
 
+app.all((req, res, next)=> {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Request-Headers', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 
 app.use(bodyParser);
-app.use(cors());
-app.options('*', cors());
 app.use(express.static('views'));
 
 let server;
