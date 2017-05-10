@@ -8,30 +8,19 @@ const {app,startServer,stopServer} = require('../server.js');
 const should = chai.should();
 chai.use(chaiHttp);
 
-let testUser = ()=>{return User.hashPassword('123').then((hashed)=>{
-    console.log('hashed is ' + hashed);
-    return {
-    username: 'Joe',
-    password: hashed,
-    unhashedPW: '123'
-};});};
-
-// let testUser = {
-//     username: 'JOE',
-//     password: User.hashPassword('123')
-// };
+let testUser = {
+    username: faker.internet.userName(),
+    password: '$2a$10$i8D0JeiwLwl1QXqN7DSkyujGw4u9l65X8xA9TmY26TJCoeJ3QqEZK',
+    unhashedPassword: '123'
+};
     
-
 function makeFakeData(){
   let data = [];
-  let number = 5;
-  for(let i =0;i<=number;i++){
+  for(let i=0; i<=5; i++){
     console.log('running!  Iteration ' + i);
     data.push({
-      username: faker.internet.userName(),
       body: faker.lorem.paragraph()
     });
-    //console.dir(data);
   }
   return Tips.insertMany(data);
 }
@@ -39,11 +28,6 @@ function makeFakeData(){
 function makeFakeUser(){
     return User.create(testUser);
 }
-
-// function tearDownDb(){
-//     Tips.remove({}, () => console.log('It works!'))
-//         .then(() => User.remove({}, () => console.log('It works, the sequel!')));
-// }
 
 function tearDownDb() {
   return new Promise((resolve, reject) => {
@@ -64,11 +48,13 @@ describe('Run the tests!\n',function(){
     return Promise.all([makeFakeUser(), makeFakeData()]);
   });
   
-//   afterEach(function(){
-//       tearDownDb();
-//   });
+  afterEach(function(){
+    return tearDownDb();
+  });
 
-  after(()=>stopServer());
+  after(()=> {
+    return stopServer();
+  });
 
   describe('\trun page\n', function() {
       it('GET endpoint', function() {
@@ -84,12 +70,12 @@ describe('Run the tests!\n',function(){
   describe('\tDo post stuff.',() => {
       it('Post endpoint', () => {
           const post = {
-              username: faker.internet.userName(),
               body: faker.lorem.paragraph()
           };
+          console.log(testUser);
           return chai.request(app)
               .post('/posts')
-              .auth(testUser.username, testUser.password)
+              .auth(testUser.username, testUser.unhashedPassword)
               .send(post)
               .then((result)=>{
                   console.log('value of result:');
@@ -104,18 +90,20 @@ describe('Run the tests!\n',function(){
   describe('\tDo put stuff', () => {
       it('PUT endpoint', () => {
           const updatedPost = {
-              username: faker.internet.userName(),
               body: faker.lorem.paragraph()
           };
 
+          let oldPost;
           return Tips
               .findOne()
               .exec()
-              .then(post => {
-                  updatedPost.id = post.id;
+              .then(_oldPost => {
+                  oldPost = _oldPost;
+                  updatedPost.id = oldPost.id;
 
                   return chai.request(app)
-                      .put(`/posts/${post.id}`)
+                      .put(`/posts/${oldPost.id}`)
+                      .auth(testUser.username, testUser.unhashedPassword)
                       .send(updatedPost);
               })
               .then(res => {
@@ -133,7 +121,8 @@ describe('Run the tests!\n',function(){
               .then(_post => {
                   post = _post;
                   return chai.request(app)
-                      .delete(`/posts/${post.id}`);
+                      .delete(`/posts/${post.id}`)
+                      .auth(testUser.username, testUser.unhashedPassword);
               })
               .then(res => {
                   res.should.have.status(204);
