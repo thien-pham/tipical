@@ -75,7 +75,7 @@ module.exports = (app)=>{
     console.log(req.body);
     let data = new Tips(req.body);
     data.save().then(() =>
-      res.status(201).location('/me').send())
+      res.status(201).send())
       .catch(err => {
         res.status(400).end();
         console.error(err);

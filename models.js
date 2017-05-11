@@ -4,7 +4,7 @@ let moment = require('moment');
 let Schema = mongoose.Schema;
 
 let TipsSchema = Schema({
-  username: {type: String, required: true, default: 'Bob Saget'},
+  username: {type: String, default: 'Bob Saget'},
   body: {type: String, required: true},
   date: {type: Date, default: Date.now()},
   location:{ type: [Number], index: '2dsphere'},

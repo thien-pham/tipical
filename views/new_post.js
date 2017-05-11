@@ -1,13 +1,27 @@
-console.log("working!");
-$('#sub').click(function(event){
- event.preventDefault();
- console.log($('#postData').val());
- $.ajaxSetup({
-   headers: { 'Authorization': "Basic root:root" }
- });
- $.ajax({
-           type: "POST",
-           url: "/posts",
-           data: {"body": "Testing!","location": [0,0]}
- });
+function addPost(post) {
+  fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      body: JSON.stringify(post),
+      headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+          'Authorization' : "Basic root:root"
+      }
+  })
+  .then(newPost => {
+      console.log('this is the newPost: ');
+      console.dir(newPost);
+  });
+}
+
+$(document).ready(function() {
+    $('#sub').on('click',function(event){
+        event.preventDefault();
+        const post = {
+            'body' : 'Mongodb powerful'
+        };
+        console.log('logging the post');
+        console.log(post);
+        addPost(post);
+    });
 });
