@@ -13,7 +13,7 @@ let TipsSchema = Schema({
 });
 
 TipsSchema.virtual('postDate').get(function() {
-  let date = moment(this.date).format('MMMM Do YYYY, h:mm a');
+  let date = moment(this.date).format('MM Do YYYY');
   return date;
 });
 

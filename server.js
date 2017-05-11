@@ -10,7 +10,7 @@ let {Tips, User} = require('./models');
 
 app.use(cors());
 app.use(bodyParser());
-app.use(express.static('views'));
+app.use('/app',express.static('views'));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
