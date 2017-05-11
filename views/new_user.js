@@ -1,10 +1,31 @@
 function addUser(user) {
+    fetch('https://arcane-retreat-92908.herokuapp.com/users', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        }
+    })
+    .then(newUser => {
+        console.log('this is the newuser: ' + newUser);
+    });
+    /*
     $.ajax({
+        // beforeSend: function(xhrObj){
+        //  xhrObj.setRequestHeader("Authorization","Basic root:root");
+        //  xhrObj.setRequestHeader("Access-Control-Allow-Origin","*");
+        //  xhrObj.setRequestHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, PUT, DELETE");
+        //  xhrObj.setRequestHeader("Access-Control-Allow-Headers","Content-Type");
+        //  xhrObj.withCredentials = true;
+        //  } ,
         type: 'POST',
         dataType: 'json',
         url: 'http://arcane-retreat-92908.herokuapp.com/users',
         crossdomain: true,
-        headers: {'Access-Control-Allow-Origin': '*','Authorization': 'Basic root:root'},
+        cors:true,
+        contentType: 'application/json; charset=utf-8',
+        headers: {'Accept': 'application/json', 'Access-Control-Allow-Origin': '*','Authorization': 'Basic root:root'},
         data: JSON.stringify(user),
         success: function(data){
             const userInfo = {
@@ -15,6 +36,7 @@ function addUser(user) {
             // logIn(userInfo);
         }
     });
+    */
 }
 
 // function logIn(userInfo) {
