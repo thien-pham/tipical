@@ -1,11 +1,13 @@
 function addPost(post) {
-  fetch('http://localhost:8080/posts', {
+  let username = $('#uname').val();
+  let pw = $('#pw').val();
+  fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
       method: 'POST',
       body: JSON.stringify(post),
       headers: {
           'Accept':'application/json',
           'Content-Type':'application/json',
-          'Authorization' : "Basic root:root"
+          'Authorization' : `Basic ${btoa(username + ":" + pw)}`
       }
   })
   .then(newPost => {
@@ -18,7 +20,8 @@ $(document).ready(function() {
     $('#sub').on('click',function(event){
         event.preventDefault();
         const post = {
-            'body' : 'Mongodb powerful'
+            'body' : `${$("#postData").val()}`,
+            'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())]
         };
         console.log('logging the post');
         console.log(post);

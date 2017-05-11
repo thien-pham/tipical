@@ -26,7 +26,6 @@ const strategy = new BasicStrategy(function(username, password, callback) {
       }
     });
 });
-
 passport.use(strategy);
 
 //the closure for the module exporting
@@ -48,7 +47,7 @@ module.exports = (app)=>{
                 coordinates: [lat,lon]
               },
               //in meters
-              $maxDistance:50000000
+              $maxDistance:500000
             }
           }
         }).then((data) => {
