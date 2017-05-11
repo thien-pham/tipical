@@ -5,6 +5,9 @@ $.get('https://arcane-retreat-92908.herokuapp.com/').then((val)=>{
     $('.container').append(`
       <div class="ui message grey column">
         <div class='ui menu'>
+        <p class="header item">
+          ${val.points.length}
+        </p>
           <p class="header item">
             ${val.location[0]}, ${val.location[1]}
           </p>

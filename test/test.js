@@ -108,7 +108,7 @@ describe('Run the tests!\n',function(){
                   res.should.have.status(204);
               });
       });
-  });
+  });//mongodb://foo:bar@ds129031.mlab.com:29031/test1
 
   describe('\tDo delete stuff', () => {
       it('DELETE endpoint', () => {

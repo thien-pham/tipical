@@ -62,10 +62,6 @@ module.exports = (app)=>{
       return res.body;
   });
 
-  app.get('/app/',(req,res)=>{
-
-  });
-
   //For client-side logging in info.  Ping it and if valid, returns true
   app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
     console.log("Hey there!");
