@@ -8,7 +8,8 @@ function addUser(user) {
         }
     })
     .then(newUser => {
-        console.log('this is the newuser: ' + newUser);
+        console.log('this is the newuser: ');
+        console.dir(newUser);
     });
     /*
     $.ajax({

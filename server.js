@@ -8,7 +8,7 @@ const app = express();
 let {Tips, User} = require('./models');
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser());
 app.use('/app',express.static('views'));
 
 app.use(function(req, res, next) {
