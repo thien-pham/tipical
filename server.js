@@ -7,7 +7,6 @@ mongoose.Promise = global.Promise;
 const app = express();
 let {Tips, User} = require('./models');
 
-
 app.use(cors());
 app.use(bodyParser());
 app.use('/app',express.static('views'));

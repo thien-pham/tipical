@@ -1,8 +1,13 @@
 console.log("working!");
 $('#sub').click(function(event){
-  console.log('yup');
-  //beforeSend: function (xhr) {
-  //    xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
-  //},
-  //$.submit()
+  event.preventDefault();
+  console.log($('#postData').val());
+  $.ajaxSetup({
+    headers: { 'Authorization': "Basic root:root" }
+  });
+  $.ajax({
+            type: "POST",
+            url: "https://arcane-retreat-92908.herokuapp.com/posts",
+            data: {"body": "Testing!","location": [0,0]}
+  });
 });
