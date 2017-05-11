@@ -58,12 +58,13 @@ function addUser(user) {
 // }
 
 $(document).ready(function() {
-    $('#signup').click(function(event){
+    $('#signupButton').on('click',function(event){
         event.preventDefault();
         const user = {
             'username': $('#username').val(),
             'password': $('#password').val()
         };
+        console.log(user);
         addUser(user);
     });
 });
