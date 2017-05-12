@@ -79,7 +79,21 @@ module.exports = (app)=>{
   //For client-side logging in info.  Ping it and if valid, returns true
   app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
     console.log("Hey there!");
-    res.send(true);
+    res.send(req.user.username);
+  });
+
+  //voting endpoint
+  app.get('/posts/vote/:id', passport.authenticate('basic', {session:false}), (req,res)=>{
+    Tips.findById(req.params.id).then((tip)=>{
+      if(tip && !(tip.points.includes(req.user.username))){
+        tip.points.push(req.user.username);
+        Tips.findByIdAndUpdate(req.params.id,{$set: tip})
+        .then(()=>res.status(204).end())
+        .catch(()=>res.status(500).json({message: 'there was a problem with the server on vote.'}));
+      }else{
+        res.status(403).json({message: "You already voted, cheater!"});
+      }
+    });
   });
 
   //POST ENDPOINTS-------------------------------------------------------
@@ -121,20 +135,6 @@ module.exports = (app)=>{
       .catch(() => {
         res.status(500).json({message: 'something went terribly awry'});
       });
-    });
-  });
-
-  //voting endpoint
-  app.get('/posts/vote/:id', passport.authenticate('basic', {session:false}), (req,res)=>{
-    Tips.findById(req.params.id).then((tip)=>{
-      if(tip && !(tip.points.includes(req.user.username))){
-        tip.points.push(req.user.username);
-        Tips.findByIdAndUpdate(req.params.id,{$set: tip})
-        .then(()=>res.status(204).end())
-        .catch(()=>res.status(500).json({message: 'there was a problem with the server on vote.'}));
-      }else{
-        res.status(403).json({message: "You already voted, cheater!"});
-      }
     });
   });
 
