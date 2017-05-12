@@ -3,6 +3,7 @@ let populateList = function(val){
   val.forEach((val)=>{
     html+=`
       <div class="ui message grey column">
+      <button class=delete_button" val="${val._id}">Delete</button>
         <div class="ui menu">
           <p class="header item">${val.points.length}</p>
           <p class = "header item">${val.location}</p>
@@ -39,4 +40,10 @@ $("#sub").on('click',(event)=>{
   }).then((result)=>{
     populateList(result);
   });
+});
+
+$(".delete_button").on('click',(event)=>{
+  event.preventDefault();
+  console.log('clicked!');
+  console.log(event);
 });
