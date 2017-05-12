@@ -55,38 +55,53 @@ describe('Run the tests!\n',function(){
     return stopServer();
   });
 
-  describe('\trun page\n', function() {
-      it('GET endpoint', function() {
+  describe('\tGET endpoint\n', () => {
+      it('should return all existing tips', () => {
+          let res;
           return chai.request(app)
               .get('/')
-              .then(function(res) {
+              .then((_res) => {
+                  res = _res;
                   res.should.have.status(200);
+                  res.body.should.have.length.of.at.least(1);
                   res.body.should.be.a('array');
+
+                  return Tips.count();
+              })
+              .then(count => {
+                  res.body.should.have.length.of(count);
               }).catch(function(err){throw err;});
       });
   });
 
-  describe('\tDo post stuff.',() => {
-      it('Post endpoint', () => {
+  describe('\tPOST endpoint\n', () => {
+      it('should add a new tip', () => {
+
           const newPost = {
-              body: faker.lorem.paragraph(),
-              location: [faker.address.latitude(),faker.address.longitude()]
+              "username": faker.internet.userName(),
+              "body": faker.lorem.paragraph(),
+              "location": [faker.address.latitude(),faker.address.longitude()]
           };
           return chai.request(app)
               .post('/posts')
               .auth(testUser.username, testUser.unhashedPassword)
               .send(newPost)
-              .then((result)=>{
-                  result.should.have.status(201);
-                  result.should.be.a('object');
+              .then((res) => {
+                  console.log("\n\n\tYOU ARE HERE!");
+                  console.log(testUser);
+                  res.should.have.status(201);
+                  res.body.should.be.a('object');
+                  res.body.should.have.ownProperty('username', 'body', 'date', 'location');
+                
+                  return Tips.findById(res.id).exec();
               }).catch(function (err) {
               throw err;
           });
       });
   });
 
-  describe('\tDo put stuff', () => {
-      it('PUT endpoint', () => {
+  describe('\tPUT endpoint', () => {
+      it('should update fields sent over', () => {
           const updatedPost = {
               body: faker.lorem.paragraph()
           };
@@ -106,14 +121,15 @@ describe('Run the tests!\n',function(){
               })
               .then(res => {
                   res.should.have.status(204);
+                  return Tips.findById(res.id).exec();
               });
       });
   });
 
   //mongodb://foo:bar@ds129031.mlab.com:29031/test1
 
-  describe('\tDo delete stuff', () => {
-      it('DELETE endpoint', () => {
+  describe('\tDELETE endpoint', () => {
+      it('should delete a post by id', () => {
           let post;
           return Tips
               .findOne()

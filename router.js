@@ -88,8 +88,9 @@ module.exports = (app)=>{
     passport.authenticate('basic', {session:false}), (req, res)=>{
     console.log(req.body);
     let data = new Tips(req.body);
-    data.save().then(() =>
-      res.status(201).send())
+    data.save().then((val) => {
+      console.log(val);
+      res.status(201).send(val);})
       .catch(err => {
         res.status(400).end();
         console.error(err);
