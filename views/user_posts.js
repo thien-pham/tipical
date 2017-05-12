@@ -2,8 +2,9 @@ let populateList = function(val){
   let html = '';
   val.forEach((val)=>{
     html+=`
-      <div class="ui message grey column">
-      <button class=delete_button" val="${val._id}">Delete</button>
+      <div value=${val} class="ui message grey column tip">
+      <button class="delete_button" value="${val._id}">Delete</button>
+      <button class="edit_button" value="${val._id}">Edit</button>
         <div class="ui menu">
           <p class="header item">${val.points.length}</p>
           <p class = "header item">${val.location}</p>
@@ -18,15 +19,9 @@ let populateList = function(val){
   $('#posts').html(html);
 };
 
-$("#sub").on('click',(event)=>{
-  event.preventDefault();
-  // $.get('https://arcane-retreat-92908.herokuapp.com/user_posts').then((val)=>{
-  //   console.log("rendering default view");
-  //   populateList(val);
-  // });
+let search = function(){
   let username = $("#uname").val();
   let pw = $("#pw").val();
-
   fetch('https://arcane-retreat-92908.herokuapp.com/user_posts', {
       method: 'get',
       headers: {
@@ -40,10 +35,81 @@ $("#sub").on('click',(event)=>{
   }).then((result)=>{
     populateList(result);
   });
+};
+
+let populateEditFields = function(){
+  return `
+    <form class="ui form">
+      <label>Latitude</label>
+      <input class="lat ui input text" type="text"></input>
+      <label>Longitude</label>
+      <input class="lon ui input text" type="text"></input>
+      <label>Tip</label>
+      <textArea class="edit_area ui input"></textArea>
+      <button class=" edit_submit_button ui fluid button" type="submit">Submit your edit</button>
+    </form>
+  `;
+};
+
+//bind the search button
+$("#sub").on('click',(event)=>{
+  event.preventDefault();
+  search();
 });
 
-$(".delete_button").on('click',(event)=>{
+//bind procedural delete buttons
+$("body").on('click', '.delete_button', (event)=>{
+  event.preventDefault();
+  let id = $(event.currentTarget).val();
+  let username = $("#uname").val();
+  let pw = $("#pw").val();
+
+  fetch(`https://arcane-retreat-92908.herokuapp.com/posts/${id}`, {
+      method: 'delete',
+      headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+          'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+      }
+  })
+  .then(() => {
+    search();
+  });
+});
+
+$("body").on('click', '.edit_button', (event)=>{
+  event.preventDefault();
+  let id = $(event.currentTarget).val();
+  let username = $("#uname").val();
+  let pw = $("#pw").val();
+  let parentContainer = $(event.currentTarget).parent();
+  //Do the fetch thing
+  fetch(`http://localhost:8080/find_post/${id}`, {
+      method: 'get',
+      headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+          'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+      }
+  })
+  .then((result) => {
+    return result.json();
+  }).then((result)=>{
+    parentContainer.html(populateEditFields());
+    let lat = parentContainer.find('.lat').get(0);
+    let lon = parentContainer.find('.lon').get(0);
+    let body = parentContainer.find('.edit_area').get(0);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    console.log(result);
+    $(lat).val(result.location[0]);
+    $(lon).val(result.location[1]);
+    $(body).val(result.body);
+  });
+
+
+});
+
+$('body').on('click','.edit_submit_button', (event)=>{
   event.preventDefault();
   console.log('clicked!');
-  console.log(event);
-});
+})

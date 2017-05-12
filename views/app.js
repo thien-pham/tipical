@@ -9,7 +9,7 @@ let renderList = function(lat,lon){
 
     });
   }else{
-    $.get(`https://arcane-retreat-92908.herokuapp.com/?lat=${lat}&lon=${lon}`).then((val)=>{
+    $.get(`https://arcane-retreat-92908.herokuapp.com?lat=${lat}&lon=${lon}`).then((val)=>{
       console.log("rendering Secondary view");
       populateList(val);
 

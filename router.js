@@ -61,10 +61,18 @@ module.exports = (app)=>{
       return res.body;
   });
 
+  //Find all posts by a user
   app.get('/user_posts',passport.authenticate('basic',{session:false}), (req,res)=>{
     Tips.find({username: req.user.username}).then((val)=>{
       console.log(val);
       res.status(200).send(val);
+    });
+  });
+
+  //find an individual post
+  app.get('/find_post/:id',passport.authenticate('basic',{session:false}), (req,res)=>{
+    Tips.findById(req.params.id).then((val)=>{
+      res.send(val);
     });
   });
 
