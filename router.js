@@ -79,7 +79,7 @@ module.exports = (app)=>{
   //For client-side logging in info.  Ping it and if valid, returns true
   app.get('/users',passport.authenticate('basic',{session:false}),(req,res)=>{
 
-    res.send(req.user.username);
+    res.send(req.user.username).end();
   });
 
   //voting endpoint
