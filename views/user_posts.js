@@ -99,17 +99,45 @@ $("body").on('click', '.edit_button', (event)=>{
     let lat = parentContainer.find('.lat').get(0);
     let lon = parentContainer.find('.lon').get(0);
     let body = parentContainer.find('.edit_area').get(0);
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     console.log(result);
     $(lat).val(result.location[0]);
     $(lon).val(result.location[1]);
     $(body).val(result.body);
+
+    lat = result.location[0];
+    lon = result.location[1];
+    body = result.body;
+
+
+    let editedPost = {
+	     "username": `${username}`,
+	      "body": `${result.body}`,
+	       "location": [0,0]
+  };
+
+    $('body').on('click','.edit_submit_button', (event)=>{
+      editedPost.body = $(".edit_area").first().val();
+      editedPost.location = [$(".lat").first().val(),$(".lon").first().val()];
+
+      console.log(id);
+      event.preventDefault();
+      fetch(`http://localhost:8080/posts/${id}`, {
+          method: 'put',
+          body: JSON.stringify(editedPost),
+          headers: {
+              'Accept':'application/json',
+              'Content-Type':'application/json',
+              'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+          }
+      })
+      .then((result) => {
+        console.log(result);
+        search();
+      });
+    });
+
   });
 
 
 });
-
-$('body').on('click','.edit_submit_button', (event)=>{
-  event.preventDefault();
-  console.log('clicked!');
-})
