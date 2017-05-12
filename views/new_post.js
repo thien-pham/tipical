@@ -21,7 +21,8 @@ $(document).ready(function() {
         event.preventDefault();
         const post = {
             'body' : `${$("#postData").val()}`,
-            'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())]
+            'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
+            'username' : `${$('#uname').val()}`
         };
         console.log('logging the post');
         console.log(post);

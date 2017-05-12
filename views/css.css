@@ -6,6 +6,7 @@ body {
   color: #43B2A7;
   font-size: 3em;
     text-shadow: 0px 0px 2px black;
+    padding: 0.3em;
 }
 
 #signup{

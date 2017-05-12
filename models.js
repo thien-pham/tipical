@@ -7,7 +7,7 @@ let TipsSchema = Schema({
   username: {type: String, default: 'Bob Saget'},
   body: {type: String, required: true},
   date: {type: Date, default: Date.now()},
-  location:{ type: [Number], index: '2dsphere'},
+  location:{ type: [Number], index: '2dsphere',},
   tags: Array,
   points: {type: Array, default: []}
 });
