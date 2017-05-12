@@ -4,10 +4,11 @@ function addPost(post) {
   fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
       method: 'POST',
       body: JSON.stringify(post),
+      credentials:'include',
       headers: {
           'Accept':'application/json',
           'Content-Type':'application/json',
-          'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+          // 'Authorization' : `Basic ${btoa(username + ":" + pw)}`
       }
   })
   .then(newPost => {

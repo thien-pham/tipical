@@ -19,7 +19,8 @@ function makeFakeData(){
   let data = [];
   for(let i=0; i<=5; i++){
     data.push({
-      body: faker.lorem.paragraph()
+      body: faker.lorem.paragraph(),
+      username: testUser.username
     });
   }
   return Tips.insertMany(data);
@@ -86,10 +87,38 @@ describe('Run the tests!\n',function(){
             res.should.have.status(200);
             return res.body;
           }).then((val)=>{
-            console.log('!!!!!');
-            console.log(val);
+            val.should.have.length.of.at.least(1);
+            val.forEach((val)=>{
+              val.should.have.ownProperty("body",'username','points','tags','date');
+            });
+
+
           });
       });
+
+
+      it('Should return a specific post.',function(){
+        return Tips.findOne().then((val)=>{
+          console.log("INDICATING IT SOMEWHERE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          console.log(val._id);
+          return chai.request(app)
+            .get(`/find_post/${val._id}`)
+            .auth(testUser.username, testUser.unhashedPassword)
+            .then((res) =>{
+              res.should.have.status(200);
+              return res.body;
+            }).then((val)=>{
+              val.should.have.ownProperty("body",'username','points','tags','date');
+            });
+
+        });
+
+      });
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      it('should return an updated vote',function(){
+
+      });
+
   });
 
   describe('\tPOST endpoint\n', () => {
@@ -182,8 +211,6 @@ describe('Run the tests!\n',function(){
                   //let id = new mongoose.Types.ObjectId();
                   return Tips.findById(oldPost._id).exec();
               }).then((val)=>{
-                console.log("!!!!!!!");
-                console.log(val);
                 val.body.should.equal(updatedPost.body);
               });
       });
