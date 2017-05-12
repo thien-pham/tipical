@@ -10,7 +10,7 @@
 </div>
 <div class="ui divider"></div>
 <div id="main" class="ui one column container">
-  <form class="ui form">
+  <form id="newpostForm" class="ui form">
     <div class="field">
       <label>User Info</label>
       <input id="uname" type="text" placeholder: '123.456'></input>
@@ -20,7 +20,9 @@
       <input id="lon" type="text" placeholder: '123.456'></input>
       <label>User Input</label>
       <textArea id="postData" rows="5"></textarea>
+      <div class="submitButton">
         <button id="sub" class="ui button" type="submit">Submit that thang!</button>
+      </div>
     </div>
   </form>
   <script src="new_post.js"></script>

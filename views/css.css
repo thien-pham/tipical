@@ -9,7 +9,19 @@ body {
     padding: 0.3em;
 }
 
-#signup{
-  max-width: 400;
+.submitButton{
+  padding-top: 15px;
+  text-align: center;
+}
+
+#login, #newpostForm{
+  max-width: 350;
   margin: auto;
+}
+
+
+
+.buttonChoices{
+  padding-top: 15px;
+  text-align: center;
 }
