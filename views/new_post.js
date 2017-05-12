@@ -1,5 +1,5 @@
 function getCurrentUser(){
-  return fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
+  return fetch('https://arcane-retreat-92908.herokuapp.com/users', {
       method: 'get',
       credentials:'include',
       headers: {
@@ -34,14 +34,18 @@ function addPost(post) {
 $(document).ready(function() {
     $('#sub').on('click',function(event){
         event.preventDefault();
-        getCurrentUser();
-        const post = {
-            'body' : `${$("#postData").val()}`,
-            'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
-            'username' : ``
-        };
-        console.log('logging the post');
-        console.log(post);
-        addPost(post);
+        getCurrentUser().then((val)=>{
+
+          const post = {
+              'body' : `${$("#postData").val()}`,
+              'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
+              'username' : `${val}`
+          };
+          console.log('logging the post');
+          console.log(post);
+          addPost(post);
+
+        });
+
     });
 });
