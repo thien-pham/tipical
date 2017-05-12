@@ -15,7 +15,7 @@ function addUser(user) {
             let userInfo = {
                 'username': data.username,
                 'password': usercredentials.password
-        }
+        };
         logIn(userInfo);
     });
 }

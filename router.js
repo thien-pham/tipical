@@ -125,7 +125,7 @@ module.exports = (app)=>{
   });
 
   //voting endpoint
-  app.post('/posts/vote/:id', passport.authenticate('basic', {session:false}), (req,res)=>{
+  app.get('/posts/vote/:id', passport.authenticate('basic', {session:false}), (req,res)=>{
     Tips.findById(req.params.id).then((tip)=>{
       if(tip && !(tip.points.includes(req.user.username))){
         tip.points.push(req.user.username);
@@ -144,7 +144,7 @@ module.exports = (app)=>{
     passport.authenticate('basic', {session:false}), (req, res) => {
     Tips
       .findByIdAndUpdate(req.params.id, {$set: req.body})
-      .then(() => res.location('/me').status(204).end())
+      .then(() => res.location(`/find_post/${req.params.id}`).status(200).end())
       .catch(() => res.status(500).json({message: 'Internal server error on put'}));
   });
   //DELETE ENDPOINTS-------------------------------------------------------

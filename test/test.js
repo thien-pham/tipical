@@ -4,6 +4,7 @@ const faker = require('faker');
 const mongoose = require('mongoose');
 const {Tips, User} = require('../models');
 const {app,startServer,stopServer} = require('../server.js');
+const {DATABASE, PORT, TESTDATABASE} = require('../config');
 
 const should = chai.should();
 chai.use(chaiHttp);
@@ -40,7 +41,7 @@ function tearDownDb() {
 describe('Run the tests!\n',function(){
 
   before(()=>{
-    return startServer();
+    return startServer(TESTDATABASE);
   });
 
   beforeEach(function(){
@@ -65,12 +66,29 @@ describe('Run the tests!\n',function(){
                   res.should.have.status(200);
                   res.body.should.have.length.of.at.least(1);
                   res.body.should.be.a('array');
+                  res.body.forEach((val)=>{
+                    val.should.have.ownProperty('username','body','location','date','tags', 'points');
+                    val.should.be.a('object');
+                  });
 
                   return Tips.count();
               })
               .then(count => {
                   res.body.should.have.length.of(count);
               }).catch(function(err){throw err;});
+      });
+
+      it('Should return all posts by a specific user.',function(){
+        return chai.request(app)
+          .get('/user_posts')
+          .auth(testUser.username, testUser.unhashedPassword)
+          .then((res) =>{
+            res.should.have.status(200);
+            return res.body;
+          }).then((val)=>{
+            console.log('!!!!!');
+            console.log(val);
+          });
       });
   });
 
@@ -87,18 +105,58 @@ describe('Run the tests!\n',function(){
               .auth(testUser.username, testUser.unhashedPassword)
               .send(newPost)
               .then((res) => {
-                  console.log("\n\n\tYOU ARE HERE!");
-                  console.log(testUser);
                   res.should.have.status(201);
                   res.body.should.be.a('object');
                   res.body.should.have.ownProperty('username', 'body', 'date', 'location');
-                
-                  return Tips.findById(res.id).exec();
+
+                  return res.body;
+                }).then((res)=>{
+                  let id = new mongoose.Types.ObjectId(res._id);
+                  return Tips.findById(id).exec();
+              }).then((val)=>{
+                val.username.should.equal(newPost.username);
+                val.body.should.equal(newPost.body);
+                should.exist(val.location[0]);
+                should.exist(val.location[1]);
               }).catch(function (err) {
               throw err;
           });
       });
   });
+
+
+
+
+  describe('\tPOST user create endpoint\n', () => {
+      it('should add a new user', () => {
+
+          const newUser = {
+              "username": faker.internet.userName(),
+              "password": faker.internet.password(),
+
+          };
+          return chai.request(app)
+              .post('/users')
+              .send(newUser)
+              .then((res) => {
+                  res.should.have.status(201);
+                  res.body.should.be.a('object');
+                  res.body.should.have.ownProperty('username', 'password');
+
+                  return res.body;
+                }).then((res)=>{
+                  let id = new mongoose.Types.ObjectId(res._id);
+                  return User.findById(id).exec();
+              }).then((val)=>{
+                val.username.should.equal(newUser.username);
+              }).catch(function (err) {
+              throw err;
+          });
+      });
+  });
+
+
+
 
   describe('\tPUT endpoint', () => {
       it('should update fields sent over', () => {
@@ -120,8 +178,13 @@ describe('Run the tests!\n',function(){
                       .send(updatedPost);
               })
               .then(res => {
-                  res.should.have.status(204);
-                  return Tips.findById(res.id).exec();
+                  res.should.have.status(200);
+                  //let id = new mongoose.Types.ObjectId();
+                  return Tips.findById(oldPost._id).exec();
+              }).then((val)=>{
+                console.log("!!!!!!!");
+                console.log(val);
+                val.body.should.equal(updatedPost.body);
               });
       });
   });

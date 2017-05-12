@@ -84,7 +84,7 @@ $("body").on('click', '.edit_button', (event)=>{
   let pw = $("#pw").val();
   let parentContainer = $(event.currentTarget).parent();
   //Do the fetch thing
-  fetch(`http://localhost:8080/find_post/${id}`, {
+  fetch(`https://arcane-retreat-92908.herokuapp.com/find_post/${id}`, {
       method: 'get',
       headers: {
           'Accept':'application/json',
