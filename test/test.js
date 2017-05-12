@@ -91,15 +91,12 @@ describe('Run the tests!\n',function(){
             val.forEach((val)=>{
               val.should.have.ownProperty("body",'username','points','tags','date');
             });
-
-
           });
       });
 
 
       it('Should return a specific post.',function(){
         return Tips.findOne().then((val)=>{
-          console.log("INDICATING IT SOMEWHERE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
           console.log(val._id);
           return chai.request(app)
             .get(`/find_post/${val._id}`)
@@ -110,15 +107,8 @@ describe('Run the tests!\n',function(){
             }).then((val)=>{
               val.should.have.ownProperty("body",'username','points','tags','date');
             });
-
         });
-
-      });
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      it('should return an updated vote',function(){
-
-      });
-
+      });    
   });
 
   describe('\tPOST endpoint\n', () => {
@@ -152,8 +142,6 @@ describe('Run the tests!\n',function(){
           });
       });
   });
-
-
 
 
   describe('\tPOST user create endpoint\n', () => {
