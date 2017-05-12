@@ -122,7 +122,7 @@ $("body").on('click', '.edit_button', (event)=>{
 
       console.log(id);
       event.preventDefault();
-      fetch(`http://localhost:8080/posts/${id}`, {
+      fetch(`https://arcane-retreat-92908.herokuapp.com/posts/${id}`, {
           method: 'put',
           body: JSON.stringify(editedPost),
           headers: {
