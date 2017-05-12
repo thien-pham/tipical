@@ -9,3 +9,4 @@ deploy:
   app: arcane-retreat-92908
   on:
     repo: thien-pham/tipical
+    all_branches: true
