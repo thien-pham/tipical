@@ -1,14 +1,10 @@
-let username;
-let pw;
 function addPost(post) {
-  
-  fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
+  fetch('https://glacial-coast-82060.herokuapp.com/posts', {
       method: 'POST',
       body: JSON.stringify(post),
       headers: {
           'Accept':'application/json',
-          'Content-Type':'application/json',
-          'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+          'Content-Type':'application/json'
       }
   })
   .then(newPost => {
@@ -18,20 +14,14 @@ function addPost(post) {
 }
 
 $(document).ready(function() {
-    $('#sub').on('click',function(event){
-        username = $("#uname").val();
-        pw = $("#pw").val();
-
+    $('#sub').on('click', function(event){
         event.preventDefault();
-     
         const post = {
               'body' : `${$("#postData").val()}`,
-              'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
-              'username' : `${username}`
+              'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())]
           };
           console.log('logging the post');
           console.log(post);
           addPost(post);
-
     });
 });

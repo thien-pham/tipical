@@ -29,18 +29,6 @@ let UserSchema = Schema({
   }
 });
 
-UserSchema.methods.validatePassword = function(password) {
-  return bcrypt
-    .compare(password, this.password)
-    .then(isValid => isValid);
-};
-
-UserSchema.statics.hashPassword = function(password) {
-  return bcrypt
-    .hash(password, 10)
-    .then(hash => hash);
-};
-
 let Tips = mongoose.model('Tip', TipsSchema);
 let User = mongoose.model('User', UserSchema);
 

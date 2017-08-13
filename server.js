@@ -18,9 +18,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-
 require('./router')(app);
-
 
 let server;
 
@@ -34,7 +32,6 @@ function startServer(databaseUrl=DATABASE, port=PORT) {
       }
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
-
         resolve();
       })
       .on('error', err => {
