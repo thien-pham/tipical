@@ -134,11 +134,11 @@ function addPost(post) {
       console.log('this is the newPost: ');
       console.dir(newPost);
       //render the new markers
-      generateMarkers(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude);
+      getMarkers(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude);
   });
 }
 
-$('#tip-submit-button').on('click', (event)=>{
+$('#submit-button').on('click', (event)=>{
   event.preventDefault();
   const post = {
       'body' : `${$("#tip-field").val()}`,
@@ -147,8 +147,16 @@ $('#tip-submit-button').on('click', (event)=>{
   console.log('logging the post');
   console.log(post);
   addPost(post);
-
 })
+
+$('#search-button').on('click', (event)=>{
+  event.preventDefault();
+  let searchArray = $("#search-field").val().toString().split(',').map(val=>parseInt(val));
+  console.log(cityLocation)
+  CenterMap(cityLocation.geobyteslongitude,cityLocation.geobyteslatitude);
+  getTips(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude)
+
+});
 
 // // let tipMap = {};
 // // tipMapp.markers = [];
