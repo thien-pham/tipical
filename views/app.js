@@ -114,9 +114,10 @@ function getTips (lat, lon) {
 function getMarkers(lat, lon) {
   getTips(lat, lon).then(tips => {
     tips.forEach(tip => {
-      let marker = new google.maps.Marker({
+      let marker = new MarkerWithLabel({
         map: map,
-        position: new google.maps.LatLng()
+        position: new google.maps.LatLng(tip),
+        labelContent: tip.body
       })
     })
   })
