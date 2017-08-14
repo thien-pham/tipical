@@ -1,163 +1,317 @@
-$(function () {
+// $(function () {
+//
+//     var mapOptions = {
+//         zoom: 10,
+//         center: new google.maps.LatLng(40.771,-73.974)
+//     };
+//
+//     var map;
+//     var locationMarker;
+//
+//     var geocoder = new google.maps.Geocoder();
+//
+//     function initialize() {
+//         map = new google.maps.Map(document.getElementById('map'), mapOptions);
+//
+// // // var input = document.getElementById('search-field');
+//         var autocompleteInput = new google.maps.places.Autocomplete(document.getElementById('search-field'));
+//
+//         //Autocomplete place Changed
+//         google.maps.event.addListener(autocompleteInput, 'place_changed', function () {
+//
+//             autocompleteInput.bindTo('bounds', map);
+//
+var lat;
+var lon;
+var map;
+var infowindow;
 
-    var mapOptions = {
+function initAutocomplete() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+            lat: 40.771,
+            lng: -73.974
+        },
         zoom: 10,
-        center: new google.maps.LatLng(40.771,-73.974)
-    };
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    
+    // Create the search box and link it to UI
+    var input = document.getElementById('tip-field');
+    var searchBox = new google.maps.places.SearchBox(input);
+    google.maps.event.trigger(map, 'resize');
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function () {
+        searchBox.setBounds(map.getBounds());
+    });
+    var markers = [];
+    // Retrieve place details
+    searchBox.addListener('places_changed', function () {
+        var places = searchBox.getPlaces();
+        console.log('places should be here' + places);
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -33.8688,
+                lng: 151.2195
+            },
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        infowindow = new google.maps.InfoWindow();
+        // Try HTML5 geolocation.
+        if (places.length == 0) {
+            alert('No places found');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
 
-    var map;
-    var locationMarker;
-
-    var geocoder = new google.maps.Geocoder();
-
-    function initialize() {
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-// // var input = document.getElementById('search-field');
-        var autocompleteInput = new google.maps.places.Autocomplete(document.getElementById('search-field'));
-
-        //Autocomplete place Changed
-        google.maps.event.addListener(autocompleteInput, 'place_changed', function () {
-
-            autocompleteInput.bindTo('bounds', map);
-
-            locationMarker = new google.maps.Marker({
-                map: map
-            });
-
-            var selectedPlace = autocompleteInput.getPlace();
-            if (!selectedPlace.geometry) {
-                return;
-            }
-
-            if (selectedPlace.geometry.viewport) {
-                map.fitBounds(selectedPlace.geometry.viewport);
+                    infowindow.setPosition(pos);
+                    infowindow.setContent('Location found.');
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, infowindow, map.getCenter());
+                });
             } else {
-                map.setCenter(selectedPlace.geometry.location);
-                map.setZoom(17);
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infowindow, map.getCenter());
             }
+        }
+        // Clear out the old markers.
+        markers.forEach(function (marker) {
+            marker.setMap(null);
+        });
+        markers = [];
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
 
-            locationMarker.setPosition(selectedPlace.geometry.location);
-
-            var locationAddress = '';
-            if (selectedPlace.address_components) {
-                address = [
-                  (selectedPlace.address_components[0] && selectedPlace.address_components[0].short_name || ''),
-                  (selectedPlace.address_components[1] && selectedPlace.address_components[1].short_name || ''),
-                  (selectedPlace.address_components[2] && selectedPlace.address_components[2].short_name || '')
-                ].join(' ');
+        places.forEach(function (place) {
+            var icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+                map: map,
+                icon: icon,
+                title: place.name,
+                position: place.geometry.location
+            }));
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
             }
-
-        }); //From place_changed
-
-    }
-
-var input = document.getElementById('search-field');
-
-var searchBox = new google.maps.places.SearchBox(input);
-
-searchBox.addListener('places_changed', function() {
-  var places = searchBox.getPlaces();
-
-  if (places.length == 0) {
-    return;
-  }
-
-  // Clear out the old markers.
-  markers.forEach(function(marker) {
-    marker.setMap(null);
-  });
-  let markers = [];
-
-  // For each place, get the icon, name and location.
-  var bounds = new google.maps.LatLngBounds();
-  places.forEach(function(place) {
-    if (!place.geometry) {
-      console.log("Returned place contains no geometry");
-      return;
-    }
-    var icon = {
-      url: place.icon,
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(25, 25)
-    };
-
-    // Create a marker for each place.
-    markers.push(new google.maps.Marker({
-      map: map,
-      icon: icon,
-      title: place.name,
-      position: place.geometry.location
-    }));
-
-    if (place.geometry.viewport) {
-      // Only geocodes have viewport.
-      bounds.union(place.geometry.viewport);
-    } else {
-      bounds.extend(place.geometry.location);
-    }
-  });
-  map.fitBounds(bounds);
-});
-    google.maps.event.addDomListener(window, 'load', initialize);
-
-});
-
-function getTips (lat, lon) {
-  return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${lat}&lon=${lon}`).then(tips=>{
-    return tips.json();
-  })
+        });
+        map.fitBounds(bounds);
+    });
 }
 
-function getMarkers(lat, lon) {
-  getTips(lat, lon).then(tips => {
-    tips.forEach(tip => {
-      let marker = new MarkerWithLabel({
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+}
+
+function validatePlace(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+        }
+    }
+}
+
+function createMarker(place) {
+    var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
         map: map,
-        position: new google.maps.LatLng(tip),
-        labelContent: tip.body
-      })
-    })
-  })
-}
-function addPost(post) {
-  fetch('https://glacial-coast-82060.herokuapp.com/posts', {
-      method: 'POST',
-      body: JSON.stringify(post),
-      headers: {
-          'Accept':'application/json',
-          'Content-Type':'application/json',
-      }
-  })
-  .then(newPost => {
-      console.log('this is the newPost: ');
-      console.dir(newPost);
-      //render the new markers
-      getMarkers(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude);
-  });
+        position: place.geometry.location
+    });
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+    });
 }
 
-$('#submit-button').on('click', (event)=>{
-  event.preventDefault();
-  const post = {
-      'body' : `${$("#tip-field").val()}`,
-      'location': [clickedLocation[1],clickedLocation[0]]
-  };
-  console.log('logging the post');
-  console.log(post);
-  addPost(post);
-})
+function searchLocations(serviceType) {
+    var service = new google.maps.places.PlacesService(map);
+    google.maps.event.trigger(map, 'resize');
+    service.nearbySearch({
+        location: pos,
+        radius: 100,
+        types: [serviceType]
+    }, validatePlace);
+}
 
-$('#search-button').on('click', (event)=>{
-  event.preventDefault();
-  let searchArray = $("#search-field").val().toString().split(',').map(val=>parseInt(val));
-  console.log(cityLocation)
-  CenterMap(cityLocation.geobyteslongitude,cityLocation.geobyteslatitude);
-  getTips(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude)
-
-});
+// $(function () {
+//
+//     var mapOptions = {
+//         zoom: 10,
+//         center: new google.maps.LatLng(40.771,-73.974)
+//     };
+//
+//     var map;
+//     var locationMarker;
+//
+//     var geocoder = new google.maps.Geocoder();
+//
+//     function initialize() {
+//         map = new google.maps.Map(document.getElementById('map'), mapOptions);
+//
+// // // var input = document.getElementById('search-field');
+//         var autocompleteInput = new google.maps.places.Autocomplete(document.getElementById('search-field'));
+//
+//         //Autocomplete place Changed
+//         google.maps.event.addListener(autocompleteInput, 'place_changed', function () {
+//
+//             autocompleteInput.bindTo('bounds', map);
+//
+//             locationMarker = new google.maps.Marker({
+//                 map: map
+//             });
+//
+//             var selectedPlace = autocompleteInput.getPlace();
+//             if (!selectedPlace.geometry) {
+//                 return;
+//             }
+//
+//             if (selectedPlace.geometry.viewport) {
+//                 map.fitBounds(selectedPlace.geometry.viewport);
+//             } else {
+//                 map.setCenter(selectedPlace.geometry.location);
+//                 map.setZoom(17);
+//             }
+//
+//             locationMarker.setPosition(selectedPlace.geometry.location);
+//
+//             var locationAddress = '';
+//             if (selectedPlace.address_components) {
+//                 address = [
+//                   (selectedPlace.address_components[0] && selectedPlace.address_components[0].short_name || ''),
+//                   (selectedPlace.address_components[1] && selectedPlace.address_components[1].short_name || ''),
+//                   (selectedPlace.address_components[2] && selectedPlace.address_components[2].short_name || '')
+//                 ].join(' ');
+//             }
+//
+//         }); //From place_changed
+//
+//     }
+//
+// var input = document.getElementById('search-field');
+//
+// var searchBox = new google.maps.places.SearchBox(input);
+//
+// searchBox.addListener('places_changed', function() {
+//   var places = searchBox.getPlaces();
+//
+//   if (places.length == 0) {
+//     return;
+//   }
+//
+//   // Clear out the old markers.
+//   markers.forEach(function(marker) {
+//     marker.setMap(null);
+//   });
+//   let markers = [];
+//
+//   // For each place, get the icon, name and location.
+//   var bounds = new google.maps.LatLngBounds();
+//   places.forEach(function(place) {
+//     if (!place.geometry) {
+//       console.log("Returned place contains no geometry");
+//       return;
+//     }
+//     var icon = {
+//       url: place.icon,
+//       size: new google.maps.Size(71, 71),
+//       origin: new google.maps.Point(0, 0),
+//       anchor: new google.maps.Point(17, 34),
+//       scaledSize: new google.maps.Size(25, 25)
+//     };
+//
+//     // Create a marker for each place.
+//     markers.push(new google.maps.Marker({
+//       map: map,
+//       icon: icon,
+//       title: place.name,
+//       position: place.geometry.location
+//     }));
+//
+//     if (place.geometry.viewport) {
+//       // Only geocodes have viewport.
+//       bounds.union(place.geometry.viewport);
+//     } else {
+//       bounds.extend(place.geometry.location);
+//     }
+//   });
+//   map.fitBounds(bounds);
+// });
+//     google.maps.event.addDomListener(window, 'load', initialize);
+//
+// });
+//
+// function getTips (lat, lon) {
+//   return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${lat}&lon=${lon}`).then(tips=>{
+//     return tips.json();
+//   })
+// }
+//
+// function getMarkers(lat, lon) {
+//   getTips(lat, lon).then(tips => {
+//     tips.forEach(tip => {
+//       let marker = new MarkerWithLabel({
+//         map: map,
+//         position: new google.maps.LatLng(tip),
+//         labelContent: tip.body
+//       })
+//     })
+//   })
+// }
+// function addPost(post) {
+//   fetch('https://glacial-coast-82060.herokuapp.com/posts', {
+//       method: 'POST',
+//       body: JSON.stringify(post),
+//       headers: {
+//           'Accept':'application/json',
+//           'Content-Type':'application/json',
+//       }
+//   })
+//   .then(newPost => {
+//       console.log('this is the newPost: ');
+//       console.dir(newPost);
+//       //render the new markers
+//       getMarkers(autocompleteInput);
+//   });
+// }
+//
+// $('#submit-button').on('click', (event)=>{
+//   event.preventDefault();
+//   const post = {
+//       'body' : `${$("#tip-field").val()}`,
+//       'location': [clickedLocation[1],clickedLocation[0]]
+//   };
+//   console.log('logging the post');
+//   console.log(post);
+//   addPost(post);
+// })
+//
+// $('#search-button').on('click', (event)=>{
+//   event.preventDefault();
+//   let searchArray = $("#search-field").val().toString().split(',').map(val=>parseInt(val));
+//   console.log(cityLocation)
+//   CenterMap(cityLocation.geobyteslongitude,cityLocation.geobyteslatitude);
+//   getTips(cityLocation.geobyteslatitude,cityLocation.geobyteslongitude)
+//
+// });
 
 // // let tipMap = {};
 // // tipMapp.markers = [];
