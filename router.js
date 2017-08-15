@@ -23,7 +23,7 @@ module.exports = (app) => {
             $near: {
               $geometry: {
                 type: 'point',
-                coordinates: [lat,lon]
+                coordinates: [lat, lon]
               },
               //in meters
               $maxDistance:500000
