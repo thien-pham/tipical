@@ -86,8 +86,8 @@ function getMarkers (location) {
     //vectorSource.clear();
     tips.forEach(tip => {
       console.log("making a marker");
-      console.log(tip);
-      let coordinate = ol.proj.transform([tip.location[1],tip.location[0]], 'EPSG:4326','EPSG:3857');
+      console.log(tip.location);
+      let coordinate = ol.proj.transform(location, 'EPSG:4326','EPSG:3857');
       let feature = new ol.Feature(
           new ol.geom.Point(coordinate)
       );
