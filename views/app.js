@@ -35,9 +35,9 @@ function initAutocomplete() {
         zoom: 10,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-    
+
     // Create the search box and link it to UI
-    var input = document.getElementById('tip-field');
+    var input = document.getElementById('search-field');
     var searchBox = new google.maps.places.SearchBox(input);
     google.maps.event.trigger(map, 'resize');
     // Bias the SearchBox results towards current map's viewport.
