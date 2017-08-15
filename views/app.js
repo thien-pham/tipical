@@ -77,8 +77,6 @@ function getCityDetails (fqcn) {
 
 function getTips (location) {
   return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`).then(tips=>{
-console.log('does this hit?');
-console.log(tips.json());
     return tips.json();
   })
 }
@@ -132,7 +130,8 @@ function addPost(post) {
       console.log('this is the newPost: ');
       console.dir(newPost);
       //render the new markers
-      getMarkers(geoLocation.lat, geoLocation.lon);
+      getMarkers(location);
+      // getMarkers(geoLocation.lat, geoLocation.lon);
   });
 }
 
