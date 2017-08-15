@@ -76,6 +76,7 @@ function getCityDetails (fqcn) {
 }
 
 function getTips (location) {
+  console.log('?', location)
   return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`).then(tips=>{
     return tips.json();
   })
