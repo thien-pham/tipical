@@ -1,5 +1,5 @@
-// $(function () {
-//
+$(function () {
+
 //     var mapOptions = {
 //         zoom: 10,
 //         center: new google.maps.LatLng(40.771,-73.974)
@@ -20,7 +20,7 @@
 //         google.maps.event.addListener(autocompleteInput, 'place_changed', function () {
 //
 //             autocompleteInput.bindTo('bounds', map);
-//
+
 var lat;
 var lon;
 var map;
@@ -114,7 +114,7 @@ function initAutocomplete() {
         map.fitBounds(bounds);
     });
 }
-
+});
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
