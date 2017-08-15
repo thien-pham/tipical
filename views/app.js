@@ -56,7 +56,7 @@ $(function ()
 	});
 	$("#search-field").autocomplete("option", "delay", 100);
   CenterMap(geoLocation.lon, geoLocation.lat);
-  getTips(geoLocation.lat, geoLocation.lon);
+  getTips(location);
 });
 
 function getCityDetails (fqcn) {

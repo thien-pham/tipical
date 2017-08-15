@@ -52,7 +52,7 @@ $(document).ready(function() {
           console.log('logging the post');
           console.log(post);
           addPost(post);
-
+          getMarkers(location);
           }
           });
         // const post = {
