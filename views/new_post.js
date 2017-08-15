@@ -33,17 +33,17 @@ $(document).ready(function() {
     $('#sub').on('click',function(event){
         event.preventDefault();
         let address = `${$("#address").val()}`;
-        getLatitudeLongitude(showResult, address);
-        console.log('ehhhh?', location);
-        // var geocoder = new google.maps.Geocoder();
-        // geocoder.geocode( { 'address': address}, function(results, status) {
-        //   if (status == google.maps.GeocoderStatus.OK) {
-        //     let lat = results[0].geometry.location.lat();
-        //     let lng = results[0].geometry.location.lng();
-        //     let location = [lat, lng];
-        //     console.log('???', location);
-        //     return location;
-        //   }
+        // let a = getLatitudeLongitude(address);
+        // console.log('ehhhh?', a);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            let lat = results[0].geometry.location.lat();
+            let lng = results[0].geometry.location.lng();
+            let location = [lat, lng];
+            console.log('???', location);
+            // return location;
+
           const post = {
             'body' : `${$("#postData").val()}`,
             'location': location
@@ -52,7 +52,9 @@ $(document).ready(function() {
           console.log('logging the post');
           console.log(post);
           addPost(post);
-          // });
+
+          }
+          });
         // const post = {
         //   'body' : `${$("#postData").val()}`,
         //   'location': [location]
@@ -70,22 +72,22 @@ $(document).ready(function() {
     });
 });
 
-function showResult(result) {
-    console.log(result);
-
-}
-function getLatitudeLongitude(callback, address) {
-  let geocoder = new google.maps.Geocoder();
-  geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      let lat = results[0].geometry.location.lat();
-      let lng = results[0].geometry.location.lng();
-      let location = [lat, lng];
-      console.log('???', location);
-      callback(location);
-    }
-  })
-}
+// function showResult(result) {
+//     console.log(result);
+//
+// }
+// function getLatitudeLongitude(address) {
+//   let geocoder = new google.maps.Geocoder();
+//   geocoder.geocode( { 'address': address}, function(results, status) {
+//     if (status == google.maps.GeocoderStatus.OK) {
+//       let lat = results[0].geometry.location.lat();
+//       let lng = results[0].geometry.location.lng();
+//       address = [lat, lng];
+//       console.log('???', address);
+//       // callback(location);
+//     }
+//   })
+// }
 
 // var button = document.getElementById('btn');
 //
