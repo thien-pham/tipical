@@ -259,39 +259,39 @@ function searchLocations(serviceType) {
 //
 // });
 //
-// function getTips (lat, lon) {
-//   return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${lat}&lon=${lon}`).then(tips=>{
-//     return tips.json();
-//   })
-// }
-//
-// function getMarkers(lat, lon) {
-//   getTips(lat, lon).then(tips => {
-//     tips.forEach(tip => {
-//       let marker = new MarkerWithLabel({
-//         map: map,
-//         position: new google.maps.LatLng(tip),
-//         labelContent: tip.body
-//       })
-//     })
-//   })
-// }
-// function addPost(post) {
-//   fetch('https://glacial-coast-82060.herokuapp.com/posts', {
-//       method: 'POST',
-//       body: JSON.stringify(post),
-//       headers: {
-//           'Accept':'application/json',
-//           'Content-Type':'application/json',
-//       }
-//   })
-//   .then(newPost => {
-//       console.log('this is the newPost: ');
-//       console.dir(newPost);
-//       //render the new markers
-//       getMarkers(autocompleteInput);
-//   });
-// }
+function getTips (lat, lon) {
+  return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${lat}&lon=${lon}`).then(tips=>{
+    return tips.json();
+  })
+}
+
+function getMarkers(lat, lon) {
+  getTips(lat, lon).then(tips => {
+    tips.forEach(tip => {
+      let marker = new MarkerWithLabel({
+        map: map,
+        position: new google.maps.LatLng(tip),
+        labelContent: tip.body
+      })
+    })
+  })
+}
+function addPost(post) {
+  fetch('https://glacial-coast-82060.herokuapp.com/posts', {
+      method: 'POST',
+      body: JSON.stringify(post),
+      headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+      }
+  })
+  .then(newPost => {
+      console.log('this is the newPost: ');
+      console.dir(newPost);
+      //render the new markers
+      getMarkers(autocompleteInput);
+  });
+}
 //
 // $('#submit-button').on('click', (event)=>{
 //   event.preventDefault();
@@ -538,24 +538,3 @@ function searchLocations(serviceType) {
 // //   }
 // // };
 // //
-// // renderList();
-// //
-// // let populateList = function(val){
-// //   let html = '';
-// //   val.forEach((val)=>{
-// //     html+=`
-// //       <div class="ui message grey column">
-// //         <div class="ui menu">
-// //           <p class="header item">${val.points.length}</p>
-// //           <p class = "header item">${val.location}</p>
-// //           <p class = "header item">${val.username}</p>
-// //           <p class="header item floated right">${val.date}</p>
-// //         </div>
-// //         <div><p>${val.body}</p></div>
-// //       </div>
-// //
-// //     `;
-// //   });
-// //   $('#posts').html(html);
-// // };
-//
