@@ -175,7 +175,7 @@ map.on('click', function(evt){
 
 });
 
-getMarkers(geoLocation.lat,geoLocation.lon);
+getMarkers(location);
 
 // let layer = new ol.layer.Tile({
 //   source: new ol.source.OSM()
