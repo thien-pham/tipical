@@ -75,14 +75,14 @@ function getCityDetails (fqcn) {
 	}
 }
 
-function getTips (lat, lon) {
-  return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${lat}&lon=${lon}`).then(tips=>{
+function getTips (location) {
+  return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`).then(tips=>{
     return tips.json();
   })
 }
 
-function getMarkers (lat,lon) {
-  getTips(lat, lon).then(tips => {
+function getMarkers (location) {
+  getTips(location).then(tips => {
     //vectorSource.clear();
     tips.forEach(tip => {
       console.log("making a marker");
