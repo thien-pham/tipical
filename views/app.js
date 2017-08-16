@@ -8,10 +8,10 @@ $(document).ready(function(){
   });
   console.log(map.center);
   getTips(40.771,-73.974);
-  var center = {
-    lat: undefined,
-    lng: undefined
-  };
+  // var center = {
+  //   lat: undefined,
+  //   lng: undefined
+  // };
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
