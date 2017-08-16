@@ -70,11 +70,13 @@ module.exports = (app) => {
   //POST ENDPOINTS-------------------------------------------------------
   //create post endpoint
   app.post('/posts', (req, res) => {
+    console.log('does this hit', req.body);
+    const lat = parseFloat(req.body.location[0]);
+    const lon = parseFloat(req.body.location[1]);
     let location = {
       type: 'Point',
-      coordinates: req.body.location
+      coordinates: [lat, lon]
     }
-    console.log('does this hit', req.body);
     let data = new Tips(req.body);
     data.save().then((val) => {
       console.log(val);
