@@ -11,9 +11,19 @@ module.exports = (app) => {
   //GET ENDPOINTS-------------------------------------------------------
   //get all tips
   app.get('/', (req, res) => {
-      if(req.query.lat !== undefined && req.query.lon !== undefined){
-        const lat = parseFloat(req.query.lat);
-        const lon = parseFloat(req.query.lon);
+      // if(req.query.lat !== undefined && req.query.lon !== undefined){
+      //   const lat = parseFloat(req.query.lat);
+      //   const lon = parseFloat(req.query.lon);
+      if(req.query.location !== undefined){
+        console.log('hello', req.query.location);
+        // const lat = parseFloat(req.query.lat);
+        // const lon = parseFloat(req.query.lon);
+        const lat = parseFloat(req.query.location[0]);
+        const lon = parseFloat(req.query.location[1]);
+        let location = {
+          type: 'Point',
+          coordinates: [req.body.location]
+        }
         Tips.find({
           location: {
             $near: {
