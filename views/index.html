@@ -20,18 +20,31 @@
   <div id="map"></div>
   <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div class="overlay">
-      <div class= "ui menu white">
+      <div class= "ui menu white ">
         <a href="/app"><h3 id="logo" class="ui header item">Tipical</h3></a>
-        <a class="ui header floated left item" href="new_post.html">New Post</a>
-        <form class="ui huge form search">
+        <a class="ui header floated left item" href="new_post.html">Add Tip</a>
+        <!-- <form class="ui huge form search">
 
           <input class="default fluid" id="tip-field" type="text" placeholder="Enter your city...">
           <button class = "ui button white inverted" id="submit-button">Add Tip</button>
+        </form> -->
+        <form action='...' method='POST' class='ui form search form-group'>
+          <div class="form-horizontal">
+            <input type="text" name="..." class="inverted fluid form-control" placeholder="Enter an address..." style="width:500px;max-width:500px;display:inline-block"/>
+            <button type="submit" class="ui button btn btn-primary" id="search-button">Search</button>
+             <!-- <span class="glyphicon glyphicon-search"></span>
+        </button> -->
+          </div>
         </form>
-        <form class="ui huge form search">
-          <input class="inverted fluid" id="search-field" type="text" placeholder="Enter your city...">
-          <button class = "ui button white inverted" id="search-button">Search</button>
-        </form>
+
+        <!-- <form class="ui huge form search form-group">
+          <div class="form-horizontal">
+          <input class="inverted fluid form-control" id="search-field" type="text" placeholder="Enter an address...">
+
+          <button type="submit" class = "ui button white inverted btn btn-primary" id="search-button">Search</i></button>
+
+</div>
+        </form> -->
       </div>
     <div id="posts" class="ui one column container"></div>
   </div>
