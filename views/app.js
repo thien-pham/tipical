@@ -6,29 +6,29 @@ $(document).ready(function(){
     zoom: 13,
     center: new google.maps.LatLng(40.771,-73.974)
   });
-  // console.log(map.center);
-  // getTips(40.771,-73.974);
-  // var center = {
-  //   lat: undefined,
-  //   lng: undefined
-  // };
+  console.log(map.center);
+  getTips(40.771,-73.974);
+  var center = {
+    lat: undefined,
+    lng: undefined
+  };
 
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(function (position) {
-//
-//       center = {
-//         lat: position.coords.latitude,
-//         lng: position.coords.longitude
-//       };
-//
-//       map.setCenter(center);
-//       getTips(center);
-//     }, function () {
-//       console.log('Error in the geolocation service.');
-//     });
-//   } else {
-//     console.log('Browser does not support geolocation.');
-//   }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+
+      center = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      map.setCenter(center);
+      getTips(center);
+    }, function () {
+      console.log('Error in the geolocation service.');
+    });
+  } else {
+    console.log('Browser does not support geolocation.');
+  }
 // });
 
   $('#search-button').on('click',function(event){
