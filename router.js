@@ -70,6 +70,10 @@ module.exports = (app) => {
   //POST ENDPOINTS-------------------------------------------------------
   //create post endpoint
   app.post('/posts', (req, res) => {
+    let location = {
+      type: 'Point',
+      coordinates: req.body.location
+    }
     console.log('does this hit', req.body);
     let data = new Tips(req.body);
     data.save().then((val) => {
