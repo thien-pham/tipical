@@ -70,7 +70,7 @@ module.exports = (app) => {
   //POST ENDPOINTS-------------------------------------------------------
   //create post endpoint
   app.post('/posts', (req, res) => {
-    console.log(req.body);
+    console.log('does this hit', req.body);
     let data = new Tips(req.body);
     data.save().then((val) => {
       console.log(val);

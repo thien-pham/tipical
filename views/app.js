@@ -3,33 +3,33 @@ $(document).ready(function(){
   var markers = []
 
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
+    zoom: 13,
     center: new google.maps.LatLng(40.771,-73.974)
   });
+  // console.log(map.center);
+  // getTips(40.771,-73.974);
+  // var center = {
+  //   lat: undefined,
+  //   lng: undefined
+  // };
 
-  var center = {
-    lat: undefined,
-    lng: undefined
-  };
-
-
-  if (navigator.geolocation) {
-
-    navigator.geolocation.getCurrentPosition(function (position) {
-
-      center = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      map.setCenter(center);
-      getTips(location);
-    }, function () {
-      console.log('Error in the geolocation service.');
-    });
-  } else {
-    console.log('Browser does not support geolocation.');
-  }
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function (position) {
+//
+//       center = {
+//         lat: position.coords.latitude,
+//         lng: position.coords.longitude
+//       };
+//
+//       map.setCenter(center);
+//       getTips(center);
+//     }, function () {
+//       console.log('Error in the geolocation service.');
+//     });
+//   } else {
+//     console.log('Browser does not support geolocation.');
+//   }
+// });
 
   $('#search-button').on('click',function(event){
     event.preventDefault();
@@ -42,81 +42,95 @@ $(document).ready(function(){
         let lng = results[0].geometry.location.lng();
         let location = [lat, lng];
         console.log('???', location);
-        getTips(location);
+        $.ajax({
+          url: `https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`,
+          dataType: 'json',
+          method: 'GET',
+          success: function(tips) {
+            console.log('tips', tips);
+            deleteMarkers();
+            getMarkers(tips);
+          },
+          error: function(error) {
+            console.log('error');
+          }
+        });
       }
     })
   })
-                // return location;
-    //
-    //           const post = {
-    //             'body' : `${$("#postData").val()}`,
-    //             'location': location
-    //             // 'address': `${$("#address").val()}`
-    //           };
-    //           console.log('logging the post');
-    //           console.log(post);
-    //           addPost(post);
-    //           getMarkers(location);
-    //           }
-    //           });
-    //     });
-  //   $.ajax({
-  //     url: "http://localhost:3000/api/search?lat=" + center.lat + "&lng=" + center.lng + "&dis=" + document.getElementById('maxDistance').value,
-  //     method: 'GET',
-  //     success: function(tips) {
-  //       console.log('tips', tips);
-  //       deleteMarkers();
-  //       getMarkers(tips);
-  //     },
-  //     error: function(error) {
-  //       console.log('error');
-  //     }
-  //   });
-  // });
-  function getTips (location) {
-    return fetch(`https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`).then(tips=>{
-      return tips.json();
-    })
+
+  function deleteMarkers() {
+      markers.forEach(function(marker) {
+        marker.setMap(null);
+        marker = null;
+      })
+      markers = [];
+    }
+
+  function getTips() {
+    $.ajax({
+      url: `https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`,
+      dataType: 'json',
+      method: 'GET',
+      success: getMarkers,
+      error: function(error) {
+        console.log('error');
+      }
+    });
+    }
+
+  function getMarkers(tips) {
+    // getTips(location).then(tips => {
+      let markers = [];
+      tips.forEach(tip => {
+        let text = tip.body;
+        let center = {
+          lat: tip.location[0],
+          lng: tip.location[1]
+        };
+        console.log('???', center)
+        // var image = {
+        //   url: 'marker.png',
+        //   // This marker is 20 pixels wide by 32 pixels high.
+        //   size: new google.maps.Size(32, 32),
+        //   // The origin for this image is (0, 0).
+        //   origin: new google.maps.Point(0, 0),
+        //   // The anchor for this image is the base of the flagpole at (0, 32).
+        //   anchor: new google.maps.Point(0, 32)
+        // };
+        var pin = new google.maps.Marker({
+          position: center,
+          map,
+          icon: 'marker.png',
+          label: tip.body});
+        markers.push(pin)
+        console.log('making a marker');
+        console.log(tip);
+        // var myLatLng = new google.maps.LatLng(location);
+        //       var marker = new google.maps.Marker({
+        //             position: myLatLng,
+        //             map: map,
+        //             title: 'Hello World!'
+        //         });
+        // // var coords = location.features.geometry.coordinates;
+        // var latLng = new google.maps.LatLng(coords[1],coords[0]);
+        //     var marker = new google.maps.Marker({
+        //       position: latLng,
+        //       map: map
+        // let markers=[];
+        // let icon = {
+        //   url: 'marker.png',
+        //   origin: [0.5, 0.5]
+        // }
+        // let marker = new MarkerWithLabel({
+        //   map: map,
+        //   position: new google.maps.LatLng(tip.location),
+        //   labelContent: tip.body
+        // })
+      })
+    // })
   }
-});
-  //
-  // function getMarkers(location) {
-  //   getTips(location).then(tips => {
-  //     let markers = [];
-  //     tips.forEach(tip => {
-  //       let text = tip.body;
-  //       let position = {
-  //         lat: tip.location[0],
-  //         lon: tip.location[1]
-  //       };
-  //       var pin = new google.maps.Marker({position, map, text});
-  //       markers.push(pin)
-  //       console.log('making a marker');
-  //       console.log(tip);
-  //       var myLatLng = new google.maps.LatLng(location);
-  //             var marker = new google.maps.Marker({
-  //                   position: myLatLng,
-  //                   map: map,
-  //                   title: 'Hello World!'
-  //               });
-  //       // var coords = location.features.geometry.coordinates;
-  //       // var latLng = new google.maps.LatLng(coords[1],coords[0]);
-  //       //     var marker = new google.maps.Marker({
-  //       //       position: latLng,
-  //       //       map: map
-  //       let markers=[];
-  //       let icon = {
-  //         url: 'marker.png',
-  //         origin: [0.5, 0.5]
-  //       }
-  //       let marker = new MarkerWithLabel({
-  //         map: map,
-  //         position: new google.maps.LatLng(tip.location),
-  //         labelContent: tip.body
-  //       })
-  //     })
-  //   })
-  // }
+    });
   // function addPost(post) {
   //   fetch('https://glacial-coast-82060.herokuapp.com/posts', {
   //       method: 'POST',
