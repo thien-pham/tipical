@@ -108,6 +108,7 @@ $(document).ready(function(){
             color: "#eb3a44",
             fontSize: "16px",
             fontWeight: "bold"
+          }
           });
         markers.push(pin)
         console.log('making a marker');
