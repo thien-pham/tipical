@@ -97,7 +97,7 @@ $(document).ready(function(){
           origin: new google.maps.Point(0, 0),
           // The anchor for this image is the base of the flagpole at (0, 32).
           anchor: new google.maps.Point(0,32),
-          labelOrigin: new google.maps.Point(9, 9)
+          labelOrigin: new google.maps.Point(0, 20)
         };
         var pin = new google.maps.Marker({
           position: center,
@@ -105,8 +105,8 @@ $(document).ready(function(){
           icon: image,
           label: {
             text:tip.body,
-            color: "#eb3a44",
-            fontSize: "16px",
+            // color: "#eb3a44",
+            fontSize: "14px",
             fontWeight: "bold"
           }
           });
