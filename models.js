@@ -6,12 +6,12 @@ let Schema = mongoose.Schema;
 let TipsSchema = Schema({
   body: {type: String, required: true},
   date: {type: Date, default: Date.now()},
-  location: { type: { type: String }, coordinates: [Number] },
-  // location:{ type: [Number], index: '2dsphere',},
+  // location: { type: { type: String }, coordinates: [Number] },
+  location:{ type: [Number], index: '2dsphere',},
   points: {type: Array, default: []}
 });
 
-TipsSchema.index({location: '2dsphere'})
+// TipsSchema.index({location: '2dsphere'})
 
 TipsSchema.virtual('postDate').get(function() {
   let date = moment(this.date).format('MM Do YYYY');
