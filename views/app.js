@@ -1,11 +1,76 @@
+let map;
+let geocoder;
+let markers = [];
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+  var latlng = new google.maps.LatLng(40.6700, -73.9400);			// set default lat/long (new york city)
+  var mapOptions = {												// options for map
+    zoom: 8,
+    center: latlng
+  }
+  getTips();
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);	// create new map in the map-canvas div
+  // getTips();
+}
+
+// function to geocode an address and plot it on a map
+	function codeAddress(address) {
+		geocoder.geocode( { 'address': address}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);			// center the map on address
+				var marker = new google.maps.Marker({					// place a marker on the map at the address
+					map: map,
+					position: results[0].geometry.location
+				});
+          let lat = results[0].geometry.location.lat();
+          let lng = results[0].geometry.location.lng();
+          let location = [lat, lng];
+			} else {
+				alert('Geocode was not successful for the following reason: ' + status);
+			}
+		});
+	}
+
+
 $(document).ready(function(){
 
   var markers = []
+  google.maps.event.addDomListener(window, 'load', initialize);
 
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 13,
-    center: new google.maps.LatLng(40.771,-73.974)
-  });
+  // $("#search-button").click(function(event){
+	// 		event.preventDefault();
+	// 		var address = $("#search-field").val();					// grab the address from the input field
+	// 		codeAddress(address);										// geocode the address
+  //     console.log(address);
+	// 	});
+
+  $('#search-button').on('click',function(event){
+    event.preventDefault();
+    let address = `${$("#search-field").val()}`;
+    console.log('ehhhh?', address);
+    codeAddress(address);
+    getTips();
+        // $.ajax({
+        //   url: `https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`,
+        //   dataType: 'json',
+        //   method: 'GET',
+        //   success: function(tips) {
+        //     console.log('tips', tips);
+        //     deleteMarkers();
+        //     getMarkers(tips);
+        //   },
+        //   error: function(error) {
+        //     console.log('error');
+        //   }
+        // });
+      })
+  })
+
+  // var map = new google.maps.Map(document.getElementById('map'), {
+  //   zoom: 13,
+  //   center: new google.maps.LatLng(40.771,-73.974)
+  // });
   // console.log(map.center);
   // getTips(40.771,-73.974);
   // var center = {
@@ -31,34 +96,8 @@ $(document).ready(function(){
 //   }
 // });
 
-  $('#search-button').on('click',function(event){
-    event.preventDefault();
-    let address = `${$("#search-field").val()}`;
-    console.log('ehhhh?', address);
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        let lat = results[0].geometry.location.lat();
-        let lng = results[0].geometry.location.lng();
-        let location = [lat, lng];
-        console.log('???', location);
-        $.ajax({
-          url: `https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`,
-          dataType: 'json',
-          method: 'GET',
-          success: function(tips) {
-            console.log('tips', tips);
-            deleteMarkers();
-            getMarkers(tips);
-          },
-          error: function(error) {
-            console.log('error');
-          }
-        });
-      }
-    })
-  })
 
+  //
   function deleteMarkers() {
       markers.forEach(function(marker) {
         marker.setMap(null);
@@ -72,12 +111,16 @@ $(document).ready(function(){
       url: `https://glacial-coast-82060.herokuapp.com?lat=${location[0]}&lon=${location[1]}`,
       dataType: 'json',
       method: 'GET',
-      success: getMarkers,
+      success: function(tips) {
+        console.log('tips', tips);
+        deleteMarkers();
+        getMarkers(tips);
+      },
       error: function(error) {
         console.log('error');
       }
-    });
-    }
+    })
+  }
 
   function getMarkers(tips) {
     // getTips(location).then(tips => {
@@ -137,7 +180,7 @@ $(document).ready(function(){
       })
     // })
   }
-    });
+    // });
   // function addPost(post) {
   //   fetch('https://glacial-coast-82060.herokuapp.com/posts', {
   //       method: 'POST',
