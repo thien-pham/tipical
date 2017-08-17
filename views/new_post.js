@@ -46,12 +46,14 @@ $(document).ready(function() {
 
           const post = {
             'body' : `${$("#postData").val()}`,
+            'title': `${$("#title").val()}`,
             'location': location
             // 'address': `${$("#address").val()}`
           };
           console.log('logging the post');
-          console.log(post);
+          console.log(post.title);
           addPost(post);
+          $("#newpostForm").trigger("reset");
           // getMarkers(location);
           }
           });

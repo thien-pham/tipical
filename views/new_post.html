@@ -4,22 +4,19 @@
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.0/css/ol.css" type="text/css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.min.css">
 
-<div class= "ui menu white">
-  <a href="/app"><h3 id="logo" class=" ui header item">Tipical</h3></a>
+<div class= "ui menu white inverted">
+  <a href="/app"><h3 id="logo" class=" ui header item">TIPical</h3></a>
   <!-- <a class="ui header floated left item" href="new_post.html">New Post</a> -->
 </div>
 <div id="main" class="ui one column container">
   <form id="newpostForm" class="ui form">
     <div class="field">
-      <!-- <label>Location</label>
-      <input id="lat" type="text" placeholder: '123.456'></input>
-      <input id="lon" type="text" placeholder: '123.456'></input> -->
-      <!-- <input id="lon" type="text" placeholder: '123.456'></input>
-      <label>User Input</label> -->
+      <label>Title</label>
+      <input id="title" type="text" placeholder="Best coffee!"></input>
       <label>Address</label>
-      <input id="address" type="text" placeholder: '123 Main St, NY, NY 11111'></input>
+      <input id="address" type="text" placeholder="123 Main St, NY, NY 11111"></input>
       <label>Tip</label>
-      <textArea id="postData" rows="5"></textarea>
+      <textArea id="postData" rows="7"></textarea>
       <div class="submitButton">
         <button id="sub" class="ui button" type="submit">Share your tip!</button>
       </div>

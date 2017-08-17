@@ -4,6 +4,7 @@ let moment = require('moment');
 let Schema = mongoose.Schema;
 
 let TipsSchema = Schema({
+  title: {type: String, required: true},
   body: {type: String, required: true},
   date: {type: Date, default: Date.now()},
   // location: { type: { type: String }, coordinates: [Number] },

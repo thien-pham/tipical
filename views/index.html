@@ -18,10 +18,9 @@
 </head>
 <body>
   <div id="map"></div>
-  <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div class="overlay">
-      <div class= "ui menu white ">
-        <a href="/app"><h3 id="logo" class="ui header item">Tipical</h3></a>
+      <div class= "ui menu white inverted ">
+        <a href="/app"><h3 id="logo" class="ui header item">TIPical</h3></a>
         <a class="ui header floated left item" href="new_post.html">Add Tip</a>
         <!-- <form class="ui huge form search">
 
@@ -30,10 +29,11 @@
         </form> -->
         <form action='...' method='POST' class='ui form search form-group'>
           <div class="form-horizontal">
-            <input type="text" id="search-field" class="inverted fluid form-control" placeholder="Enter an address..." style="width:500px;max-width:500px;display:inline-block"/>
-            <button type="submit" class="ui button btn btn-primary" id="search-button">Search</button>
-             <!-- <span class="glyphicon glyphicon-search"></span>
-        </button> -->
+            <label>Search for tips near:</label>
+            <input type="text" id="search-field" class="inverted fluid form-control" placeholder="Enter a location..." style="width:500px;max-width:500px;display:inline-block"/>
+            <button type="submit" class="ui button btn btn-primary" id="search-button">
+             <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
           </div>
         </form>
 
