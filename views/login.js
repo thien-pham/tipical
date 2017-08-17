@@ -10,7 +10,7 @@ $(document).ready(function() {
     });
 
     function logIn(userInfo) {
-        fetch('https://arcane-retreat-92908.herokuapp.com/users', {
+        fetch('https://glacial-coast-82060.herokuapp.com/users', {
             method: 'POST',
             body: JSON.stringify(userInfo),
             headers: {

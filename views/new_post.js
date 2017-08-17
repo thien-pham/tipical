@@ -1,7 +1,6 @@
 function getCurrentUser(){
-  return fetch('https://arcane-retreat-92908.herokuapp.com/users', {
+  return fetch('https://glacial-coast-82060.herokuapp.com/users', {
       method: 'get',
-      credentials:'include',
       headers: {
           'Accept':'application/json',
           'Content-Type':'application/json',
@@ -15,14 +14,12 @@ function getCurrentUser(){
 }
 
 function addPost(post) {
-  fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
+  fetch('https://glacial-coast-82060.herokuapp.com/posts', {
       method: 'POST',
       body: JSON.stringify(post),
-      credentials:'include',
       headers: {
           'Accept':'application/json',
           'Content-Type':'application/json',
-          // 'Authorization' : `Basic ${btoa(username + ":" + pw)}`
       }
   })
   .then(newPost => {
@@ -31,21 +28,34 @@ function addPost(post) {
   });
 }
 
+
 $(document).ready(function() {
     $('#sub').on('click',function(event){
         event.preventDefault();
-        getCurrentUser().then((val)=>{
+        let address = `${$("#address").val()}`;
+        // let a = getLatitudeLongitude(address);
+        // console.log('ehhhh?', a);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            let lat = results[0].geometry.location.lat();
+            let lng = results[0].geometry.location.lng();
+            let location = [lat, lng];
+            console.log('???', location);
+            // return location;
 
           const post = {
-              'body' : `${$("#postData").val()}`,
-              'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
-              'username' : `${val}`
+            'body' : `${$("#postData").val()}`,
+            'title': `${$("#title").val()}`,
+            'location': location
+            // 'address': `${$("#address").val()}`
           };
           console.log('logging the post');
-          console.log(post);
+          console.log(post.title);
           addPost(post);
-
+          $("#newpostForm").trigger("reset");
+          // getMarkers(location);
+          }
+          });
         });
-
-    });
 });

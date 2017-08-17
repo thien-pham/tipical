@@ -1,29 +1,51 @@
-<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/flick/jquery-ui.css" />
-<link rel="stylesheet" href="./semantic.min.css">
-<link rel="stylesheet" type="text/css" href="css.css">
-<div class= "ui menu white">
-<a href="/app"><h3 id="logo" class=" ui header item">Tipical</h3></a>
-<a class="ui header floated left item" href="new_post.html">New Post</a>
-<a class="ui header item" href="user_posts.html">User Posts</a>
-<a class="ui header item floated right" href="new_user.html">Create Account</a>
-</div>
-<div class = 'ui one column container'>
-  <form class="ui huge form search">
-    <input class="" id="search-field" type="text" placeholder="Enter your city...">
-    <div class = "ui button white inverted fluid " id="search-button">Search</div>
-  </form>
-</div>
+<head>
+  <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/flick/jquery-ui.css" />
+  <link rel="stylesheet" href="./semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous"></script>
+  	<script src="https://use.fontawesome.com/e5da894dce.js"></script>
+  <script src="./semantic.min.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfpfnY_xf4KCPPx0-zROcVNkkQSSidFag&libraries=places">
+  </script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <div id="map"></div>
+    <div class="overlay">
+      <div class= "ui menu white inverted ">
+        <a href="/app"><h3 id="logo" class="ui header item">TIPical</h3></a>
+        <a class="ui header floated left item" href="new_post.html">Add Tip</a>
+        <!-- <form class="ui huge form search">
 
-<div id="posts" class="ui one column container"></div>
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+          <input class="default fluid" id="tip-field" type="text" placeholder="Enter your city...">
+          <button class = "ui button white inverted" id="submit-button">Add Tip</button>
+        </form> -->
+        <form action='...' method='POST' class='ui form search form-group'>
+          <div class="form-horizontal">
+            <label>Search for tips near:</label>
+            <input type="text" id="search-field" class="inverted fluid form-control" placeholder="Enter a location..." style="width:500px;max-width:500px;display:inline-block"/>
+            <button type="submit" class="ui button btn btn-primary" id="search-button">
+             <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+          </div>
+        </form>
 
-<script
-  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-  crossorigin="anonymous"></script>
-	<script src="https://use.fontawesome.com/e5da894dce.js"></script>
-<script src="./semantic.min.js"></script>
-<script src="app.js"></script>
+        <!-- <form class="ui huge form search form-group">
+          <div class="form-horizontal">
+          <input class="inverted fluid form-control" id="search-field" type="text" placeholder="Enter an address...">
+
+          <button type="submit" class = "ui button white inverted btn btn-primary" id="search-button">Search</i></button>
+
+</div>
+        </form> -->
+      </div>
+    <div id="posts" class="ui one column container"></div>
+  </div>
+</body>

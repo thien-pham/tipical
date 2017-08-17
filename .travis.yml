@@ -6,6 +6,7 @@ deploy:
   provider: heroku
   api_key:
     secure: u6vkPd927zBwSVEN1BfPICnVifJgiuM10UQ1ninFpBYZEWWqoP5XaDyQG/ndi5rc5absswugtvzKeG/f01ldlq//DM6mWjl1cSnmRCYMaBeXNW7heKQ2cDRw5p1cG5MotDZzfJMeZik2cv4/MFfR6bp0Hcx/FUmwzqkMH/R73USW2gNskauQjVqgKXRHHJuItR0hBg6SVf/PJRgRH128nC9aMP7LQZhWjxTr/Pm2Mz5V9iN4B5wJyBOArL5AUlKsmB5J9vl7UhD6olieLONb3M8VyNMTtGx0XYwzBDpZxEbb17AKzmjw2Xbib7k3ai/62c98vPgZPmjF5bq2CsC/hBdC/tE3Z+0bxpOVzQVg9e8//a581p8jdM6YaO4gkBdvniLNL9Pr2QUk56/ge03vRFSlOZa+6y814wwp4U81mmwP+rw1U+2teLdOeYLbNdZo1YZ5rKyjhDMZVzioj0dw0qavy/UWrGohow0EbGX9UYkC9BbykKjuUl83iiWGXEGji/bTqOzs/nYwtqXnd8QESxc+Xx6D7zsvCoxsE3xPswpERX/MYUIgqUyGfLOHxRfXkwW7VV0+1P8gbYOyGEqbn8mBJW/f3lLMhRj8omQRsGGTUY71NgYPahzaiT4H6hKi+vGF+9LAUd/Oa5n0oRDZwz7ymPGl0QqXM2XLAVe1aTA=
-  app: arcane-retreat-92908
+  app: glacial-coast-82060
   on:
-    repo: thien-pham/tipical
+    repo: thien-pham/tipical-api
+    all_branches: true
