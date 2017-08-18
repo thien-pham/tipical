@@ -1,26 +1,29 @@
-TIPICAL
+#TIPICAL
+TIPical is a location-based application designed to help you live like a local and/or share your hard-earned knowledge as one by posting and searching for the tips you deem most essential.
 
-TIPical is a location-based application designed to help you live like a local and/or share your hard-earned knowledge as one by posting and searching the tips you deem most essential to your current travel spot or place of residence. You can sign up and keep track of your posted tips, as well as edit and delete them.
+![app page](/images/tipical.png)
 
-![app page](/Capture5/Capture1.JPG)
+##ABOUT
+Using the Google Maps API, TIPical allows users to post tips and search locations which then queries our database for nearby tips. It was made to cement our understanding of Express and server-side JavaScript development. You can see a sample app deployed [here](https://glacial-coast-82060.herokuapp.com/app/)!
 
-ABOUT
-TIPical requires login credentials in order to save your posted tips and to post new ones. You can post tips to our API or search through them based on location.
 
-TECHNOLOGY
+##TECHNOLOGY
 
-Front End
--Semantic UI
--JavaScript
--jQuery
--CSS
+###Front End
+*Semantic UI
+*JavaScript
+*jQuery
+*CSS3
+*HTML5
 
-Back End
--Node.js
--MongoDB
--Bcrypt
--Passport
+###Back End
+*Node.js
+*MongoDB
 
-Tests
--Mocha
--Chai
+###Testing/Deployment
+*Mocha
+*Chai
+*Faker
+*Travis Cl
+*Heroku
+*mLab
