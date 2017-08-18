@@ -78,7 +78,6 @@ module.exports = (app) => {
       coordinates: [lat, lon]
     }
     let data = new Tips(req.body);
-    console.log('????????', data)
     data.save().then((val) => {
       console.log(val);
       res.status(201).send(val);})
