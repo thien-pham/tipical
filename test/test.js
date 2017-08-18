@@ -91,8 +91,11 @@ describe('Run the tests!\n',function(){
             val.forEach((val)=>{
               val.should.have.ownProperty("body",'username','points','tags','date');
             });
+
+
           });
       });
+
 
       it('Should return a specific post.',function(){
         return Tips.findOne().then((val)=>{
@@ -107,35 +110,14 @@ describe('Run the tests!\n',function(){
             }).then((val)=>{
               val.should.have.ownProperty("body",'username','points','tags','date');
             });
+
         });
+
       });
-      
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       it('should return an updated vote',function(){
-        return Tips.findOne().then((val)=>{
-            console.log(val._id);
-            return chai.request(app)
-                .get(`/posts/vote/${val._id}`)
-                .auth(testUser.username, testUser.unhashedPassword)
-                .then((res) =>{
-                res.should.have.status(204);
-                // }).then((val)=>{
-                // val.should.have.ownProperty("body",'username','points','tags','date');
-                });
 
-        });
       });
-
-
-        it('Should return all posts by a specific user.',function(){
-            return chai.request(app)
-                .get('/users')
-                .auth(testUser.username, testUser.unhashedPassword)
-                .then((res) =>{
-                res.should.have.status(200);
-                
-                });
-                
-            });
 
   });
 

@@ -13,14 +13,12 @@ app.use(bodyParser.json());
 app.use('/app',express.static('views'));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", req.get('origin'));
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-
 require('./router')(app);
-
 
 let server;
 
@@ -34,7 +32,6 @@ function startServer(databaseUrl=DATABASE, port=PORT) {
       }
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
-
         resolve();
       })
       .on('error', err => {

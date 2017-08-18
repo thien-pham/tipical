@@ -4,13 +4,15 @@ let moment = require('moment');
 let Schema = mongoose.Schema;
 
 let TipsSchema = Schema({
-  username: {type: String, default: 'Bob Saget'},
+  title: {type: String, required: true},
   body: {type: String, required: true},
   date: {type: Date, default: Date.now()},
+  // location: { type: { type: String }, coordinates: [Number] },
   location:{ type: [Number], index: '2dsphere',},
-  tags: Array,
   points: {type: Array, default: []}
 });
+
+// TipsSchema.index({location: '2dsphere'})
 
 TipsSchema.virtual('postDate').get(function() {
   let date = moment(this.date).format('MM Do YYYY');
@@ -28,18 +30,6 @@ let UserSchema = Schema({
     required: true
   }
 });
-
-UserSchema.methods.validatePassword = function(password) {
-  return bcrypt
-    .compare(password, this.password)
-    .then(isValid => isValid);
-};
-
-UserSchema.statics.hashPassword = function(password) {
-  return bcrypt
-    .hash(password, 10)
-    .then(hash => hash);
-};
 
 let Tips = mongoose.model('Tip', TipsSchema);
 let User = mongoose.model('User', UserSchema);

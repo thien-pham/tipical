@@ -1,14 +1,25 @@
-function addPost(post) {
-  let username = $('#uname').val();
-  let pw = $('#pw').val();
-  fetch('https://arcane-retreat-92908.herokuapp.com/posts', {
-      method: 'POST',
-      body: JSON.stringify(post),
-      credentials:'include',
+function getCurrentUser(){
+  return fetch('https://glacial-coast-82060.herokuapp.com/users', {
+      method: 'get',
       headers: {
           'Accept':'application/json',
           'Content-Type':'application/json',
-          // 'Authorization' : `Basic ${btoa(username + ":" + pw)}`
+      }
+  })
+  .then(val => {
+      console.log('this is the val: ');
+      console.dir(val);
+      return val;
+  });
+}
+
+function addPost(post) {
+  fetch('https://glacial-coast-82060.herokuapp.com/posts', {
+      method: 'POST',
+      body: JSON.stringify(post),
+      headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json',
       }
   })
   .then(newPost => {
@@ -17,16 +28,34 @@ function addPost(post) {
   });
 }
 
+
 $(document).ready(function() {
     $('#sub').on('click',function(event){
         event.preventDefault();
-        const post = {
+        let address = `${$("#address").val()}`;
+        // let a = getLatitudeLongitude(address);
+        // console.log('ehhhh?', a);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            let lat = results[0].geometry.location.lat();
+            let lng = results[0].geometry.location.lng();
+            let location = [lat, lng];
+            console.log('???', location);
+            // return location;
+
+          const post = {
             'body' : `${$("#postData").val()}`,
-            'location': [parseFloat($("#lat").val()),parseFloat($("#lon").val())],
-            'username' : `${$('#uname').val()}`
-        };
-        console.log('logging the post');
-        console.log(post);
-        addPost(post);
-    });
+            'title': `${$("#title").val()}`,
+            'location': location
+            // 'address': `${$("#address").val()}`
+          };
+          console.log('logging the post');
+          console.log(post.title);
+          addPost(post);
+          $("#newpostForm").trigger("reset");
+          // getMarkers(location);
+          }
+          });
+        });
 });
